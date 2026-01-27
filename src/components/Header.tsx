@@ -17,7 +17,7 @@ export function Header() {
               <GraduationCap className="w-6 h-6 text-primary-foreground" />
             </div>
             <span className="font-display font-bold text-xl text-foreground">
-              EduPath<span className="text-primary">AI</span>
+              Bright<span className="text-primary">Careers</span>
             </span>
           </Link>
 
