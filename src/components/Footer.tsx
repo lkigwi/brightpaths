@@ -13,7 +13,7 @@ export function Footer() {
                 <GraduationCap className="w-6 h-6 text-primary-foreground" />
               </div>
               <span className="font-display font-bold text-xl">
-                EduPath<span className="text-primary">AI</span>
+                Bright<span className="text-primary">Careers</span>
               </span>
             </Link>
             <p className="text-background/70 max-w-md">
@@ -84,7 +84,7 @@ export function Footer() {
 
         <div className="border-t border-background/20 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-background/60 text-sm">
-            © 2024 EduPath AI. Built for KSEF 2024.
+            © 2024 Bright Careers. Built for KSEF 2024.
           </p>
           <p className="text-background/60 text-sm flex items-center gap-1">
             Made with <Heart className="w-4 h-4 text-arts" /> for Kenyan Students
