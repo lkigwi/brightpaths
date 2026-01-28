@@ -19,7 +19,7 @@ export function Hero() {
           {/* Main heading */}
           <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 animate-fade-in" style={{ animationDelay: '0.1s' }}>
             Discover Your Perfect
-            <span className="text-cyan-500 block mt-2">Senior School Pathway</span>
+            <span className="text-blue-500 block mt-2">Senior School Pathway</span>
           </h1>
 
           {/* Subtitle */}
