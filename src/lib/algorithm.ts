@@ -1,4 +1,4 @@
-// EduPath AI - Pathway Prediction Algorithm
+// Bright Careers - Pathway Prediction Algorithm
 
 import { 
   Pathway, 
