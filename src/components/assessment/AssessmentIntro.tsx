@@ -22,9 +22,9 @@ export function AssessmentIntro() {
           <div className="w-14 h-14 bg-stem-light rounded-xl flex items-center justify-center mx-auto mb-4">
             <BookOpen className="w-7 h-7 text-stem" />
           </div>
-          <h3 className="font-display font-semibold mb-2">Step 1: Academic Data</h3>
+          <h3 className="font-display font-semibold mb-2">Step 1: Your Name</h3>
           <p className="text-muted-foreground text-sm">
-            Enter your grades from Grades 7, 8, and 9 across all subjects.
+            Tell us your name for a personalized experience.
           </p>
         </div>
 
@@ -55,7 +55,6 @@ export function AssessmentIntro() {
           <span className="font-medium">Estimated Time: 10-15 minutes</span>
         </div>
         <ul className="text-sm text-muted-foreground space-y-2 ml-8">
-          <li>• Have your school report cards handy for accurate grade entry</li>
           <li>• Answer all quiz questions honestly for best results</li>
           <li>• Your data stays private and is not stored</li>
         </ul>
