@@ -1,19 +1,18 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { AcademicScores, QuizAnswers, FullResults, predictPathway } from '@/lib/algorithm';
-import { Pathway } from '@/lib/data';
+import { QuizAnswers, FullResults, predictPathwayFromQuizOnly } from '@/lib/algorithm';
+import { Pathway, QuizQuestion, getRandomQuizQuestions } from '@/lib/data';
 
 interface AssessmentContextType {
   // State
   currentStep: number;
   studentName: string;
-  academicScores: AcademicScores;
   quizAnswers: QuizAnswers;
   results: FullResults | null;
+  currentQuestions: QuizQuestion[];
   
   // Actions
   setCurrentStep: (step: number) => void;
   setStudentName: (name: string) => void;
-  updateAcademicScore: (subject: string, grade: 'grade7' | 'grade8' | 'grade9', score: number) => void;
   setQuizAnswer: (questionId: number, pathway: Pathway) => void;
   calculateResults: () => void;
   resetAssessment: () => void;
@@ -24,23 +23,9 @@ const AssessmentContext = createContext<AssessmentContextType | undefined>(undef
 export function AssessmentProvider({ children }: { children: ReactNode }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [studentName, setStudentName] = useState('');
-  const [academicScores, setAcademicScores] = useState<AcademicScores>({});
   const [quizAnswers, setQuizAnswers] = useState<QuizAnswers>({});
   const [results, setResults] = useState<FullResults | null>(null);
-
-  const updateAcademicScore = (
-    subject: string, 
-    grade: 'grade7' | 'grade8' | 'grade9', 
-    score: number
-  ) => {
-    setAcademicScores(prev => ({
-      ...prev,
-      [subject]: {
-        ...prev[subject],
-        [grade]: score,
-      },
-    }));
-  };
+  const [currentQuestions, setCurrentQuestions] = useState<QuizQuestion[]>(() => getRandomQuizQuestions(10));
 
   const setQuizAnswer = (questionId: number, pathway: Pathway) => {
     setQuizAnswers(prev => ({
@@ -50,16 +35,16 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
   };
 
   const calculateResults = () => {
-    const fullResults = predictPathway(academicScores, quizAnswers);
+    const fullResults = predictPathwayFromQuizOnly(quizAnswers);
     setResults(fullResults);
   };
 
   const resetAssessment = () => {
     setCurrentStep(0);
     setStudentName('');
-    setAcademicScores({});
     setQuizAnswers({});
     setResults(null);
+    setCurrentQuestions(getRandomQuizQuestions(10)); // Get new random questions
   };
 
   return (
@@ -67,12 +52,11 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
       value={{
         currentStep,
         studentName,
-        academicScores,
         quizAnswers,
         results,
+        currentQuestions,
         setCurrentStep,
         setStudentName,
-        updateAcademicScore,
         setQuizAnswer,
         calculateResults,
         resetAssessment,

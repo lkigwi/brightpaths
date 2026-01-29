@@ -110,17 +110,15 @@ export function calculateMarketScores(): Record<Pathway, number> {
   };
 }
 
-// Main algorithm: Combine all three layers
-export function predictPathway(
-  academicScores: AcademicScores,
+// Main algorithm: Quiz-only prediction (interest 70%, market 30%)
+export function predictPathwayFromQuizOnly(
   quizAnswers: QuizAnswers
 ): FullResults {
   // Calculate individual scores
-  const academic = calculateAcademicScores(academicScores);
   const interest = calculateInterestScores(quizAnswers);
   const market = calculateMarketScores();
 
-  // Weighted combination (50% academic, 30% interest, 20% market)
+  // Weighted combination (70% interest, 30% market)
   const finalScores: Record<Pathway, number> = {
     'STEM': 0,
     'Social Sciences': 0,
@@ -129,9 +127,8 @@ export function predictPathway(
 
   for (const pathway of Object.keys(finalScores) as Pathway[]) {
     finalScores[pathway] = 
-      (academic[pathway] * 0.5) + 
-      (interest[pathway] * 0.3) + 
-      (market[pathway] * 0.2);
+      (interest[pathway] * 0.7) + 
+      (market[pathway] * 0.3);
   }
 
   // Normalize to percentages that sum to 100
@@ -141,7 +138,7 @@ export function predictPathway(
     .map(pathway => ({
       pathway,
       percentage: Math.round((finalScores[pathway] / total) * 100),
-      academicScore: Math.round(academic[pathway]),
+      academicScore: 0,
       interestScore: Math.round(interest[pathway]),
       marketScore: Math.round(market[pathway]),
     }))

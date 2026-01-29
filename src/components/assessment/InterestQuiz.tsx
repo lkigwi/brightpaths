@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { useAssessment } from '@/context/AssessmentContext';
-import { quizQuestions, Pathway } from '@/lib/data';
+import { Pathway } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, ArrowLeft, Brain, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function InterestQuiz() {
-  const { quizAnswers, setQuizAnswer, setCurrentStep, calculateResults } = useAssessment();
+  const { quizAnswers, setQuizAnswer, setCurrentStep, calculateResults, currentQuestions } = useAssessment();
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
-  const question = quizQuestions[currentQuestion];
-  const totalQuestions = quizQuestions.length;
+  const question = currentQuestions[currentQuestion];
+  const totalQuestions = currentQuestions.length;
   const progress = ((currentQuestion + 1) / totalQuestions) * 100;
 
   const handleAnswer = (pathway: Pathway) => {
@@ -109,7 +109,7 @@ export function InterestQuiz() {
 
       {/* Question Navigation */}
       <div className="flex justify-center gap-2 mb-8 flex-wrap">
-        {quizQuestions.map((q, index) => (
+        {currentQuestions.map((q, index) => (
           <button
             key={q.id}
             onClick={() => setCurrentQuestion(index)}
@@ -131,7 +131,7 @@ export function InterestQuiz() {
       <div className="flex justify-between">
         <Button variant="ghost" onClick={handlePrevious}>
           <ArrowLeft className="w-4 h-4 mr-2" />
-          {currentQuestion === 0 ? 'Back to Grades' : 'Previous'}
+          {currentQuestion === 0 ? 'Back' : 'Previous'}
         </Button>
         <Button 
           onClick={handleNext}
