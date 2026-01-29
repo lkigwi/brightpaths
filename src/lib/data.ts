@@ -325,8 +325,8 @@ export const careers: Career[] = [
   },
 ];
 
-// Interest Quiz Questions
-export const quizQuestions: QuizQuestion[] = [
+// Full question pool for randomization
+export const allQuizQuestions: QuizQuestion[] = [
   {
     id: 1,
     question: 'On a free Saturday, you would most enjoy:',
@@ -417,7 +417,106 @@ export const quizQuestions: QuizQuestion[] = [
       { text: 'Cultural expression, sports excellence, and creativity', pathway: 'Arts & Sports' },
     ],
   },
+  {
+    id: 11,
+    question: 'Which activity sounds most exciting to you?',
+    options: [
+      { text: 'Conducting a science experiment', pathway: 'STEM' },
+      { text: 'Organizing a community fundraiser', pathway: 'Social Sciences' },
+      { text: 'Directing a short film or play', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 12,
+    question: 'If you could start any club at school, it would be:',
+    options: [
+      { text: 'Robotics or coding club', pathway: 'STEM' },
+      { text: 'Debate or Model UN club', pathway: 'Social Sciences' },
+      { text: 'Dance, music, or sports club', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 13,
+    question: 'Your friends often come to you for help with:',
+    options: [
+      { text: 'Math homework or fixing gadgets', pathway: 'STEM' },
+      { text: 'Advice on personal issues or current events', pathway: 'Social Sciences' },
+      { text: 'Creative projects or physical activities', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 14,
+    question: 'When you visit a bookshop, you head to:',
+    options: [
+      { text: 'Science, technology, or engineering section', pathway: 'STEM' },
+      { text: 'History, biography, or business section', pathway: 'Social Sciences' },
+      { text: 'Art, photography, or sports section', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 15,
+    question: 'You would rather win an award for:',
+    options: [
+      { text: 'A scientific discovery or invention', pathway: 'STEM' },
+      { text: 'Leadership or community service', pathway: 'Social Sciences' },
+      { text: 'Artistic talent or athletic achievement', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 16,
+    question: 'On a field trip, you would choose to visit:',
+    options: [
+      { text: 'A science museum or tech company', pathway: 'STEM' },
+      { text: 'Parliament, a law firm, or the UN office', pathway: 'Social Sciences' },
+      { text: 'An art gallery, stadium, or film studio', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 17,
+    question: 'If you could have any superpower, it would be:',
+    options: [
+      { text: 'Super intelligence or technopathy', pathway: 'STEM' },
+      { text: 'Mind reading or perfect persuasion', pathway: 'Social Sciences' },
+      { text: 'Super speed, strength, or artistic mastery', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 18,
+    question: 'You feel most accomplished when you:',
+    options: [
+      { text: 'Solve a complex puzzle or build something', pathway: 'STEM' },
+      { text: 'Help resolve a conflict or explain something clearly', pathway: 'Social Sciences' },
+      { text: 'Create something beautiful or win a game', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 19,
+    question: 'Your dream vacation would involve:',
+    options: [
+      { text: 'Visiting NASA, Silicon Valley, or CERN', pathway: 'STEM' },
+      { text: 'Exploring historical sites or attending a global summit', pathway: 'Social Sciences' },
+      { text: 'Attending a major sports event or arts festival', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 20,
+    question: 'The subject of a podcast you\'d create would be about:',
+    options: [
+      { text: 'New technologies, space, or scientific discoveries', pathway: 'STEM' },
+      { text: 'Politics, economics, or social issues', pathway: 'Social Sciences' },
+      { text: 'Music reviews, sports analysis, or creative inspiration', pathway: 'Arts & Sports' },
+    ],
+  },
 ];
+
+// Function to get randomized questions for each session
+export function getRandomQuizQuestions(count: number = 10): QuizQuestion[] {
+  const shuffled = [...allQuizQuestions].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count).map((q, index) => ({ ...q, id: index + 1 }));
+}
+
+// Legacy export for compatibility
+export const quizQuestions = allQuizQuestions.slice(0, 10);
 
 // Academic subjects for grade input
 export const academicSubjects = [

@@ -2,14 +2,14 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { AssessmentProvider, useAssessment } from '@/context/AssessmentContext';
 import { AssessmentIntro } from '@/components/assessment/AssessmentIntro';
-import { AcademicForm } from '@/components/assessment/AcademicForm';
+import { NameForm } from '@/components/assessment/NameForm';
 import { InterestQuiz } from '@/components/assessment/InterestQuiz';
 import { ResultsDashboard } from '@/components/assessment/ResultsDashboard';
 import { cn } from '@/lib/utils';
 
 const steps = [
   { id: 0, name: 'Introduction' },
-  { id: 1, name: 'Academic Data' },
+  { id: 1, name: 'Your Name' },
   { id: 2, name: 'Interest Quiz' },
   { id: 3, name: 'Results' },
 ];
@@ -61,7 +61,7 @@ function AssessmentContent() {
         {/* Step Content */}
         <div className="max-w-4xl mx-auto">
           {currentStep === 0 && <AssessmentIntro />}
-          {currentStep === 1 && <AcademicForm />}
+          {currentStep === 1 && <NameForm />}
           {currentStep === 2 && <InterestQuiz />}
           {currentStep === 3 && <ResultsDashboard />}
         </div>
