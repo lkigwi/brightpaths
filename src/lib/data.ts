@@ -507,6 +507,141 @@ export const allQuizQuestions: QuizQuestion[] = [
       { text: 'Music reviews, sports analysis, or creative inspiration', pathway: 'Arts & Sports' },
     ],
   },
+  {
+    id: 21,
+    question: 'When you hear about a new smartphone, you are most curious about:',
+    options: [
+      { text: 'The processor speed, camera technology, and specs', pathway: 'STEM' },
+      { text: 'The price, brand reputation, and market impact', pathway: 'Social Sciences' },
+      { text: 'The design, colors, and how it looks', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 22,
+    question: 'If you could shadow someone for a day, it would be:',
+    options: [
+      { text: 'A surgeon, engineer, or software developer', pathway: 'STEM' },
+      { text: 'A CEO, diplomat, or journalist', pathway: 'Social Sciences' },
+      { text: 'A famous athlete, artist, or musician', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 23,
+    question: 'Your ideal weekend project would be:',
+    options: [
+      { text: 'Building an app or experimenting with electronics', pathway: 'STEM' },
+      { text: 'Writing an article or planning a business idea', pathway: 'Social Sciences' },
+      { text: 'Painting, making music, or training for a sport', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 24,
+    question: 'When watching the news, you pay most attention to:',
+    options: [
+      { text: 'Scientific breakthroughs and technology updates', pathway: 'STEM' },
+      { text: 'Political developments and economic reports', pathway: 'Social Sciences' },
+      { text: 'Entertainment news and sports highlights', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 25,
+    question: 'You would describe your thinking style as:',
+    options: [
+      { text: 'Analytical and systematic', pathway: 'STEM' },
+      { text: 'Strategic and people-oriented', pathway: 'Social Sciences' },
+      { text: 'Creative and expressive', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 26,
+    question: 'If you were to start a YouTube channel, it would be about:',
+    options: [
+      { text: 'Tech reviews, science experiments, or tutorials', pathway: 'STEM' },
+      { text: 'Educational content, vlogs, or business tips', pathway: 'Social Sciences' },
+      { text: 'Music covers, sports highlights, or art tutorials', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 27,
+    question: 'In a crisis situation, you would naturally:',
+    options: [
+      { text: 'Analyze the situation and find a logical solution', pathway: 'STEM' },
+      { text: 'Calm people down and coordinate the group', pathway: 'Social Sciences' },
+      { text: 'Stay flexible and adapt quickly using instinct', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 28,
+    question: 'The type of game you enjoy most is:',
+    options: [
+      { text: 'Puzzle games, strategy games, or simulations', pathway: 'STEM' },
+      { text: 'Trivia, board games, or role-playing games', pathway: 'Social Sciences' },
+      { text: 'Sports games, rhythm games, or creative sandbox games', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 29,
+    question: 'Your room is most likely decorated with:',
+    options: [
+      { text: 'Gadgets, science posters, or a computer setup', pathway: 'STEM' },
+      { text: 'Books, maps, or inspirational quotes', pathway: 'Social Sciences' },
+      { text: 'Artwork, sports memorabilia, or musical instruments', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 30,
+    question: 'When learning something new, you prefer:',
+    options: [
+      { text: 'Hands-on experiments and practical applications', pathway: 'STEM' },
+      { text: 'Reading, discussions, and case studies', pathway: 'Social Sciences' },
+      { text: 'Visual demonstrations and learning by doing creatively', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 31,
+    question: 'If Kenya was facing an energy crisis, you would contribute by:',
+    options: [
+      { text: 'Developing renewable energy solutions', pathway: 'STEM' },
+      { text: 'Creating awareness campaigns and policy proposals', pathway: 'Social Sciences' },
+      { text: 'Using art or media to inspire conservation', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 32,
+    question: 'Your favorite type of competition would be:',
+    options: [
+      { text: 'Science fair, coding hackathon, or math olympiad', pathway: 'STEM' },
+      { text: 'Debate competition, business pitch, or essay contest', pathway: 'Social Sciences' },
+      { text: 'Art exhibition, music competition, or sports tournament', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 33,
+    question: 'When planning an event, you focus on:',
+    options: [
+      { text: 'Technical requirements and logistics', pathway: 'STEM' },
+      { text: 'Guest list, budget, and promotional strategy', pathway: 'Social Sciences' },
+      { text: 'Theme, entertainment, and creative elements', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 34,
+    question: 'If you could invent something, it would be:',
+    options: [
+      { text: 'A new technology or scientific tool', pathway: 'STEM' },
+      { text: 'A new business model or social system', pathway: 'Social Sciences' },
+      { text: 'A new art form or sports equipment', pathway: 'Arts & Sports' },
+    ],
+  },
+  {
+    id: 35,
+    question: 'What motivates you most in life?',
+    options: [
+      { text: 'Solving complex problems and making discoveries', pathway: 'STEM' },
+      { text: 'Making an impact on society and helping others succeed', pathway: 'Social Sciences' },
+      { text: 'Expressing yourself and achieving physical or creative excellence', pathway: 'Arts & Sports' },
+    ],
+  },
 ];
 
 // Function to get randomized questions for each session
