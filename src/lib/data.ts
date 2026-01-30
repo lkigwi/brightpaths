@@ -1,4 +1,4 @@
-// Bright Careers Data - CBC Kenya Pathways, Subjects, and Careers
+// Bright Paths Data - CBC Kenya Pathways, Subjects, and Careers
 
 export type Pathway = 'STEM' | 'Social Sciences' | 'Arts & Sports';
 

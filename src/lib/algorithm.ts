@@ -1,4 +1,4 @@
-// Bright Careers - Pathway Prediction Algorithm
+// Bright Paths - Pathway Prediction Algorithm
 
 import { 
   Pathway, 

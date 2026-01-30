@@ -45,7 +45,7 @@ export function Features() {
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-            How Bright Careers Works
+            How Bright Paths Works
           </h2>
           <p className="text-muted-foreground text-lg">
             Our three-layer algorithm combines your academics, interests, and market data 
