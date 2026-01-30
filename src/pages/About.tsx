@@ -15,7 +15,7 @@ export default function About() {
         {/* Page Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">
-            How <span className="text-gradient-primary">Bright Careers</span> Works
+            How <span className="text-gradient-primary">Bright Paths</span> Works
           </h1>
           <p className="text-muted-foreground text-lg">
             Our three-layer algorithmic system combines academic performance, personal interests, 
