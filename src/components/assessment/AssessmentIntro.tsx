@@ -34,7 +34,7 @@ export function AssessmentIntro() {
           </div>
           <h3 className="font-display font-semibold mb-2">Step 2: Interest Quiz</h3>
           <p className="text-muted-foreground text-sm">
-            Answer 10 questions about your interests and preferences.
+            Answer 15 questions about your interests and preferences.
           </p>
         </div>
 

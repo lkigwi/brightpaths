@@ -41,7 +41,7 @@ export default function About() {
                   </span>
                 </div>
                 <p className="text-muted-foreground mb-4">
-                  A 10-question psychometric quiz assesses your natural interests, problem-solving 
+                  A 15-question psychometric quiz assesses your natural interests, problem-solving 
                   preferences, and career aspirations. This ensures your recommendation aligns 
                   with what you genuinely enjoy and are passionate about.
                 </p>

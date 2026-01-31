@@ -645,7 +645,7 @@ export const allQuizQuestions: QuizQuestion[] = [
 ];
 
 // Function to get randomized questions for each session
-export function getRandomQuizQuestions(count: number = 10): QuizQuestion[] {
+export function getRandomQuizQuestions(count: number = 15): QuizQuestion[] {
   const shuffled = [...allQuizQuestions].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count).map((q, index) => ({ ...q, id: index + 1 }));
 }
