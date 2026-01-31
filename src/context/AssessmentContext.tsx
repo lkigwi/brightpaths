@@ -25,7 +25,7 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
   const [studentName, setStudentName] = useState('');
   const [quizAnswers, setQuizAnswers] = useState<QuizAnswers>({});
   const [results, setResults] = useState<FullResults | null>(null);
-  const [currentQuestions, setCurrentQuestions] = useState<QuizQuestion[]>(() => getRandomQuizQuestions(10));
+  const [currentQuestions, setCurrentQuestions] = useState<QuizQuestion[]>(() => getRandomQuizQuestions(15));
 
   const setQuizAnswer = (questionId: number, pathway: Pathway) => {
     setQuizAnswers(prev => ({
@@ -44,7 +44,7 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
     setStudentName('');
     setQuizAnswers({});
     setResults(null);
-    setCurrentQuestions(getRandomQuizQuestions(10)); // Get new random questions
+    setCurrentQuestions(getRandomQuizQuestions(15)); // Get new random questions
   };
 
   return (
