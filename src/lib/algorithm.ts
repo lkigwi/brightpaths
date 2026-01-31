@@ -2,20 +2,10 @@
 
 import { 
   Pathway, 
-  academicSubjects, 
   jobMarketWeights, 
-  quizQuestions,
   subjects,
   careers 
 } from './data';
-
-export interface AcademicScores {
-  [subject: string]: {
-    grade7: number;
-    grade8: number;
-    grade9: number;
-  };
-}
 
 export interface QuizAnswers {
   [questionId: number]: Pathway;
@@ -24,7 +14,6 @@ export interface QuizAnswers {
 export interface PathwayResult {
   pathway: Pathway;
   percentage: number;
-  academicScore: number;
   interestScore: number;
   marketScore: number;
 }
@@ -35,45 +24,6 @@ export interface FullResults {
   recommendedSubjects: typeof subjects;
   recommendedCareers: typeof careers;
   confidence: 'High' | 'Medium' | 'Low';
-}
-
-// Calculate pathway scores from academic data (50% weight)
-export function calculateAcademicScores(scores: AcademicScores): Record<Pathway, number> {
-  const pathwayScores: Record<Pathway, number> = {
-    'STEM': 0,
-    'Social Sciences': 0,
-    'Arts & Sports': 0,
-  };
-
-  const pathwayCounts: Record<Pathway, number> = {
-    'STEM': 0,
-    'Social Sciences': 0,
-    'Arts & Sports': 0,
-  };
-
-  for (const subject of academicSubjects) {
-    const subjectScores = scores[subject.name];
-    if (subjectScores) {
-      // Average across all three grades with more weight on recent grades
-      const weightedAvg = 
-        (subjectScores.grade7 * 0.2) + 
-        (subjectScores.grade8 * 0.3) + 
-        (subjectScores.grade9 * 0.5);
-      
-      // Apply subject weight
-      pathwayScores[subject.pathway] += weightedAvg * subject.weight;
-      pathwayCounts[subject.pathway] += subject.weight;
-    }
-  }
-
-  // Normalize scores to 0-100
-  for (const pathway of Object.keys(pathwayScores) as Pathway[]) {
-    if (pathwayCounts[pathway] > 0) {
-      pathwayScores[pathway] = pathwayScores[pathway] / pathwayCounts[pathway];
-    }
-  }
-
-  return pathwayScores;
 }
 
 // Calculate pathway scores from quiz answers (30% weight)
@@ -138,7 +88,6 @@ export function predictPathwayFromQuizOnly(
     .map(pathway => ({
       pathway,
       percentage: Math.round((finalScores[pathway] / total) * 100),
-      academicScore: 0,
       interestScore: Math.round(interest[pathway]),
       marketScore: Math.round(market[pathway]),
     }))

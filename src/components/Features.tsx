@@ -1,12 +1,6 @@
-import { BookOpen, Brain, Briefcase, LineChart, Target, Users } from 'lucide-react';
+import { Brain, Briefcase, LineChart, Target, Users, Sparkles } from 'lucide-react';
 
 const features = [
-  {
-    icon: BookOpen,
-    title: 'Academic Analysis',
-    description: 'We analyze your Junior School grades (7-9) to understand your academic strengths across different subject clusters.',
-    color: 'text-stem bg-stem-light',
-  },
   {
     icon: Brain,
     title: 'Interest Profiling',
@@ -37,6 +31,12 @@ const features = [
     description: 'See real career possibilities with salary ranges, required skills, and growth potential.',
     color: 'text-accent bg-accent/10',
   },
+  {
+    icon: Sparkles,
+    title: 'Personalized Results',
+    description: 'Get a comprehensive results dashboard with your pathway match and career recommendations.',
+    color: 'text-stem bg-stem-light',
+  },
 ];
 
 export function Features() {
@@ -48,7 +48,7 @@ export function Features() {
             How Bright Paths Works
           </h2>
           <p className="text-muted-foreground text-lg">
-            Our three-layer algorithm combines your academics, interests, and market data 
+            Our two-layer algorithm combines your interests and market data 
             to give you personalized pathway recommendations.
           </p>
         </div>

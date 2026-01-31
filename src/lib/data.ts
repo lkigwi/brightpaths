@@ -653,18 +653,6 @@ export function getRandomQuizQuestions(count: number = 10): QuizQuestion[] {
 // Legacy export for compatibility
 export const quizQuestions = allQuizQuestions.slice(0, 10);
 
-// Academic subjects for grade input
-export const academicSubjects = [
-  { name: 'Integrated Science', pathway: 'STEM' as Pathway, weight: 1.2 },
-  { name: 'Mathematics', pathway: 'STEM' as Pathway, weight: 1.3 },
-  { name: 'Pre-Technical Studies', pathway: 'STEM' as Pathway, weight: 1.1 },
-  { name: 'Social Studies', pathway: 'Social Sciences' as Pathway, weight: 1.2 },
-  { name: 'Business Studies', pathway: 'Social Sciences' as Pathway, weight: 1.1 },
-  { name: 'Languages (English/Kiswahili)', pathway: 'Social Sciences' as Pathway, weight: 1.0 },
-  { name: 'Creative Arts', pathway: 'Arts & Sports' as Pathway, weight: 1.2 },
-  { name: 'Physical & Health Education', pathway: 'Arts & Sports' as Pathway, weight: 1.1 },
-];
-
 // Job market trends 2026 weights
 export const jobMarketWeights: Record<Pathway, number> = {
   'STEM': 1.25, // High demand for tech
