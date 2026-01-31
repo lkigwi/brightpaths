@@ -23,7 +23,7 @@ export interface QuizQuestion {
   question: string;
   options: {
     text: string;
-    pathway: Pathway;
+    pathway: Pathway | null;
   }[];
 }
 

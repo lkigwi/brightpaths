@@ -13,13 +13,19 @@ export function InterestQuiz() {
   const totalQuestions = currentQuestions.length;
   const progress = ((currentQuestion + 1) / totalQuestions) * 100;
 
-  const handleAnswer = (pathway: Pathway) => {
+  const handleAnswer = (pathway: Pathway | null) => {
     setQuizAnswer(question.id, pathway);
     
     if (currentQuestion < totalQuestions - 1) {
       setCurrentQuestion(currentQuestion + 1);
     }
   };
+
+  // Combine question options with "Rather not say"
+  const allOptions = [
+    ...question.options,
+    { text: "Rather not say", pathway: null as Pathway | null }
+  ];
 
   const handleNext = () => {
     if (currentQuestion < totalQuestions - 1) {
@@ -76,8 +82,9 @@ export function InterestQuiz() {
         </h3>
 
         <div className="space-y-4">
-          {question.options.map((option, index) => {
+          {allOptions.map((option, index) => {
             const isSelected = quizAnswers[question.id] === option.pathway;
+            const isRatherNotSay = option.pathway === null;
             
             return (
               <button
@@ -86,7 +93,9 @@ export function InterestQuiz() {
                 className={cn(
                   "w-full p-4 rounded-xl border-2 text-left transition-all duration-200",
                   isSelected 
-                    ? "border-secondary bg-secondary/10" 
+                    ? isRatherNotSay
+                      ? "border-muted-foreground bg-muted"
+                      : "border-secondary bg-secondary/10" 
                     : "border-border hover:border-secondary/50 hover:bg-muted/50"
                 )}
               >
@@ -94,12 +103,20 @@ export function InterestQuiz() {
                   <div className={cn(
                     "w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0",
                     isSelected 
-                      ? "border-secondary bg-secondary" 
+                      ? isRatherNotSay
+                        ? "border-muted-foreground bg-muted-foreground"
+                        : "border-secondary bg-secondary" 
                       : "border-muted-foreground"
                   )}>
-                    {isSelected && <CheckCircle2 className="w-4 h-4 text-secondary-foreground" />}
+                    {isSelected && <CheckCircle2 className={cn(
+                      "w-4 h-4",
+                      isRatherNotSay ? "text-background" : "text-secondary-foreground"
+                    )} />}
                   </div>
-                  <span className="font-medium">{option.text}</span>
+                  <span className={cn(
+                    "font-medium",
+                    isRatherNotSay && "text-muted-foreground italic"
+                  )}>{option.text}</span>
                 </div>
               </button>
             );
@@ -117,7 +134,7 @@ export function InterestQuiz() {
               "w-8 h-8 rounded-full text-sm font-medium transition-all duration-200",
               index === currentQuestion 
                 ? "bg-secondary text-secondary-foreground" 
-                : quizAnswers[q.id] 
+                : quizAnswers[q.id] !== undefined 
                   ? "bg-secondary/20 text-secondary" 
                   : "bg-muted text-muted-foreground hover:bg-muted/80"
             )}
@@ -135,7 +152,7 @@ export function InterestQuiz() {
         </Button>
         <Button 
           onClick={handleNext}
-          disabled={!quizAnswers[question.id]}
+          disabled={quizAnswers[question.id] === undefined}
           variant={isQuizComplete && currentQuestion === totalQuestions - 1 ? 'hero' : 'default'}
         >
           {currentQuestion === totalQuestions - 1 ? 'See My Results' : 'Next'}
