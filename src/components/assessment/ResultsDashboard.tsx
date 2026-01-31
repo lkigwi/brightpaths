@@ -63,7 +63,7 @@ export function ResultsDashboard() {
           {studentName ? `${studentName}'s` : 'Your'} Results
         </h2>
         <p className="text-muted-foreground text-lg">
-          Based on your academics, interests, and Kenya's 2026 job market
+          Based on your interests and Kenya's 2026 job market
         </p>
       </div>
 
@@ -142,7 +142,6 @@ export function ResultsDashboard() {
                   />
                 </div>
                 <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                  <span>Academic: {pathway.academicScore}%</span>
                   <span>Interest: {pathway.interestScore}%</span>
                   <span>Market: {pathway.marketScore}%</span>
                 </div>

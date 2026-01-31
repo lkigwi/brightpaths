@@ -1,7 +1,7 @@
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, BookOpen, Brain, TrendingUp, Calculator, Target, Award } from 'lucide-react';
+import { ArrowRight, Brain, TrendingUp, Calculator, Target, Award } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function About() {
@@ -18,7 +18,7 @@ export default function About() {
             How <span className="text-gradient-primary">Bright Paths</span> Works
           </h1>
           <p className="text-muted-foreground text-lg">
-            Our three-layer algorithmic system combines academic performance, personal interests, 
+            Our two-layer algorithmic system combines personal interests 
             and real-world market data to give you the most accurate pathway recommendation.
           </p>
         </div>
@@ -26,37 +26,7 @@ export default function About() {
         {/* Algorithm Explanation */}
         <div className="max-w-4xl mx-auto mb-16">
           <div className="relative">
-            {/* Layer A */}
-            <div className="flex gap-6 mb-8">
-              <div className="flex-shrink-0">
-                <div className="w-16 h-16 bg-stem-light rounded-2xl flex items-center justify-center">
-                  <BookOpen className="w-8 h-8 text-stem" />
-                </div>
-              </div>
-              <div className="flex-grow">
-                <div className="flex items-center gap-3 mb-2">
-                  <h3 className="font-display text-xl font-bold">Layer A: Academic Data</h3>
-                  <span className="text-xs font-bold px-3 py-1 bg-stem/10 text-stem rounded-full">
-                    50% Weight
-                  </span>
-                </div>
-                <p className="text-muted-foreground mb-4">
-                  We analyze your grades from Junior School (Grades 7, 8, and 9) across different 
-                  subject clusters. Recent grades carry more weight since they better reflect your 
-                  current abilities. Subjects are grouped by pathway relevance.
-                </p>
-                <div className="bg-card rounded-xl p-4 shadow-sm">
-                  <p className="text-sm font-medium mb-2">Example Clustering:</p>
-                  <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• <span className="text-stem font-medium">STEM:</span> Integrated Science, Mathematics, Pre-Technical Studies</li>
-                    <li>• <span className="text-social font-medium">Social Sciences:</span> Social Studies, Business Studies, Languages</li>
-                    <li>• <span className="text-arts font-medium">Arts & Sports:</span> Creative Arts, Physical Education</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Layer B */}
+            {/* Layer A: Interest Profiling */}
             <div className="flex gap-6 mb-8">
               <div className="flex-shrink-0">
                 <div className="w-16 h-16 bg-social-light rounded-2xl flex items-center justify-center">
@@ -65,15 +35,15 @@ export default function About() {
               </div>
               <div className="flex-grow">
                 <div className="flex items-center gap-3 mb-2">
-                  <h3 className="font-display text-xl font-bold">Layer B: Interest Profiling</h3>
+                  <h3 className="font-display text-xl font-bold">Layer A: Interest Profiling</h3>
                   <span className="text-xs font-bold px-3 py-1 bg-social/10 text-social rounded-full">
-                    30% Weight
+                    70% Weight
                   </span>
                 </div>
                 <p className="text-muted-foreground mb-4">
                   A 10-question psychometric quiz assesses your natural interests, problem-solving 
                   preferences, and career aspirations. This ensures your recommendation aligns 
-                  with what you genuinely enjoy, not just what you're good at.
+                  with what you genuinely enjoy and are passionate about.
                 </p>
                 <div className="bg-card rounded-xl p-4 shadow-sm">
                   <p className="text-sm font-medium mb-2">Sample Questions:</p>
@@ -86,7 +56,7 @@ export default function About() {
               </div>
             </div>
 
-            {/* Layer C */}
+            {/* Layer B: Market Intelligence */}
             <div className="flex gap-6 mb-8">
               <div className="flex-shrink-0">
                 <div className="w-16 h-16 bg-arts-light rounded-2xl flex items-center justify-center">
@@ -95,9 +65,9 @@ export default function About() {
               </div>
               <div className="flex-grow">
                 <div className="flex items-center gap-3 mb-2">
-                  <h3 className="font-display text-xl font-bold">Layer C: Market Intelligence</h3>
+                  <h3 className="font-display text-xl font-bold">Layer B: Market Intelligence</h3>
                   <span className="text-xs font-bold px-3 py-1 bg-arts/10 text-arts rounded-full">
-                    20% Weight
+                    30% Weight
                   </span>
                 </div>
                 <p className="text-muted-foreground mb-4">
@@ -130,9 +100,8 @@ export default function About() {
           <div className="bg-card rounded-xl p-6 shadow-sm mb-6">
             <p className="text-center font-mono text-lg">
               <span className="text-stem font-bold">Pathway Score</span> = 
-              (<span className="text-stem">Academic × 0.5</span>) + 
-              (<span className="text-social">Interest × 0.3</span>) + 
-              (<span className="text-arts">Market × 0.2</span>)
+              (<span className="text-social">Interest × 0.7</span>) + 
+              (<span className="text-arts">Market × 0.3</span>)
             </p>
           </div>
           
@@ -160,7 +129,7 @@ export default function About() {
               <h4 className="font-display font-semibold mb-2">The Problem</h4>
               <p className="text-sm text-muted-foreground">
                 Many students choose pathways based on peer pressure or parental expectations, 
-                leading to academic stress and career dissatisfaction.
+                leading to stress and career dissatisfaction.
               </p>
             </div>
             
@@ -170,7 +139,7 @@ export default function About() {
               </div>
               <h4 className="font-display font-semibold mb-2">Our Solution</h4>
               <p className="text-sm text-muted-foreground">
-                Data-driven recommendations based on your actual performance, genuine interests, 
+                Data-driven recommendations based on your genuine interests 
                 and real market opportunities in Kenya.
               </p>
             </div>
@@ -181,8 +150,8 @@ export default function About() {
               </div>
               <h4 className="font-display font-semibold mb-2">The Impact</h4>
               <p className="text-sm text-muted-foreground">
-                Students who align their education with their strengths are 3x more likely 
-                to succeed academically and professionally.
+                Students who align their education with their interests are 3x more likely 
+                to succeed professionally.
               </p>
             </div>
           </div>
@@ -194,7 +163,7 @@ export default function About() {
             Ready to Find Your Path?
           </h3>
           <p className="text-muted-foreground mb-6">
-            The assessment takes about 10-15 minutes and provides instant results.
+            The assessment takes about 5-10 minutes and provides instant results.
           </p>
           <Button 
             variant="hero" 
