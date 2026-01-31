@@ -13,7 +13,7 @@ interface AssessmentContextType {
   // Actions
   setCurrentStep: (step: number) => void;
   setStudentName: (name: string) => void;
-  setQuizAnswer: (questionId: number, pathway: Pathway) => void;
+  setQuizAnswer: (questionId: number, pathway: Pathway | null) => void;
   calculateResults: () => void;
   resetAssessment: () => void;
 }
@@ -27,7 +27,7 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
   const [results, setResults] = useState<FullResults | null>(null);
   const [currentQuestions, setCurrentQuestions] = useState<QuizQuestion[]>(() => getRandomQuizQuestions(15));
 
-  const setQuizAnswer = (questionId: number, pathway: Pathway) => {
+  const setQuizAnswer = (questionId: number, pathway: Pathway | null) => {
     setQuizAnswers(prev => ({
       ...prev,
       [questionId]: pathway,

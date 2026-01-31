@@ -8,7 +8,7 @@ import {
 } from './data';
 
 export interface QuizAnswers {
-  [questionId: number]: Pathway;
+  [questionId: number]: Pathway | null;
 }
 
 export interface PathwayResult {
@@ -26,7 +26,7 @@ export interface FullResults {
   confidence: 'High' | 'Medium' | 'Low';
 }
 
-// Calculate pathway scores from quiz answers (30% weight)
+// Calculate pathway scores from quiz answers (70% weight)
 export function calculateInterestScores(answers: QuizAnswers): Record<Pathway, number> {
   const pathwayCounts: Record<Pathway, number> = {
     'STEM': 0,
@@ -34,14 +34,17 @@ export function calculateInterestScores(answers: QuizAnswers): Record<Pathway, n
     'Arts & Sports': 0,
   };
 
+  let validAnswers = 0;
   for (const questionId of Object.keys(answers)) {
     const pathway = answers[parseInt(questionId)];
-    if (pathway) {
+    if (pathway !== null && pathway !== undefined) {
       pathwayCounts[pathway]++;
+      validAnswers++;
     }
   }
 
-  const totalAnswers = Object.keys(answers).length || 1;
+  // Only count valid answers (not "Rather not say")
+  const totalAnswers = validAnswers || 1;
 
   return {
     'STEM': (pathwayCounts['STEM'] / totalAnswers) * 100,
