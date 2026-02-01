@@ -18,7 +18,7 @@ export function Footer() {
             </Link>
             <p className="text-background/70 max-w-md">
               An algorithmic decision-support system helping Kenyan Grade 9 learners 
-              choose their ideal CBC Senior School pathway based on data, not pressure.
+              choose their ideal CBE Senior School pathway based on data, not pressure.
             </p>
           </div>
 
@@ -75,7 +75,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="text-background/70 hover:text-background transition-colors"
                 >
-                  KICD CBC Resources
+                  KICD CBE Resources
                 </a>
               </li>
             </ul>

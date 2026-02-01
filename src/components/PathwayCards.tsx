@@ -52,7 +52,7 @@ export function PathwayCards() {
             Three Pathways, Endless Possibilities
           </h2>
           <p className="text-muted-foreground text-lg">
-            The CBC Senior School offers three distinct pathways, each leading to unique career opportunities.
+            The CBE Senior School offers three distinct pathways, each leading to unique career opportunities.
           </p>
         </div>
 

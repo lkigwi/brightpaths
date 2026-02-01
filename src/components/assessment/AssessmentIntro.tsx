@@ -13,7 +13,7 @@ export function AssessmentIntro() {
         </h2>
         <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
           This assessment will analyze your interests and career potential 
-          to recommend the best CBC Senior School pathway for you.
+          to recommend the best CBE Senior School pathway for you.
         </p>
       </div>
 

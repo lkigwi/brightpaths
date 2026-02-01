@@ -68,7 +68,7 @@ export default function Pathways() {
         {/* Page Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">
-            Explore CBC <span className="text-gradient-primary">Pathways</span>
+            Explore CBE <span className="text-gradient-primary">Pathways</span>
           </h1>
           <p className="text-muted-foreground text-lg">
             Understand each pathway's subjects, requirements, and career possibilities 
