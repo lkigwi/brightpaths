@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
+import { Feedback } from '@/components/Feedback';
 
 const pathwayIcons = {
   'STEM': Atom,
@@ -209,7 +210,7 @@ export function ResultsDashboard() {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-wrap justify-center gap-4">
+      <div className="flex flex-wrap justify-center gap-4 mb-12">
         <Button 
           variant="outline" 
           onClick={resetAssessment}
@@ -225,6 +226,9 @@ export function ResultsDashboard() {
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
       </div>
+
+      {/* Feedback Section */}
+      <Feedback />
     </div>
   );
 }
