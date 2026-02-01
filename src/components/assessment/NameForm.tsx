@@ -3,12 +3,71 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, ArrowLeft, User } from 'lucide-react';
+import { useState } from 'react';
+
+// Input validation constants
+const MAX_NAME_LENGTH = 100;
+const MIN_NAME_LENGTH = 2;
+// Allow letters, spaces, hyphens, apostrophes, and common diacritics
+const NAME_PATTERN = /^[\p{L}\s'-]+$/u;
+
+// Sanitize and validate name input
+const sanitizeName = (input: string): string => {
+  // Trim whitespace and limit length
+  const trimmed = input.trim().slice(0, MAX_NAME_LENGTH);
+  // Remove any control characters or null bytes
+  return trimmed.replace(/[\x00-\x1F\x7F]/g, '');
+};
+
+const validateName = (name: string): { isValid: boolean; error?: string } => {
+  const sanitized = sanitizeName(name);
+  
+  if (sanitized.length === 0) {
+    return { isValid: false };
+  }
+  
+  if (sanitized.length < MIN_NAME_LENGTH) {
+    return { isValid: false, error: `Name must be at least ${MIN_NAME_LENGTH} characters` };
+  }
+  
+  if (sanitized.length > MAX_NAME_LENGTH) {
+    return { isValid: false, error: `Name must be less than ${MAX_NAME_LENGTH} characters` };
+  }
+  
+  if (!NAME_PATTERN.test(sanitized)) {
+    return { isValid: false, error: 'Name can only contain letters, spaces, hyphens, and apostrophes' };
+  }
+  
+  return { isValid: true };
+};
 
 export function NameForm() {
   const { studentName, setStudentName, setCurrentStep } = useAssessment();
+  const [validationError, setValidationError] = useState<string | undefined>();
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value;
+    
+    // Limit input length at the input level
+    if (rawValue.length > MAX_NAME_LENGTH) {
+      return;
+    }
+    
+    // Update state with the raw value (allows typing)
+    setStudentName(rawValue);
+    
+    // Validate and show errors
+    if (rawValue.trim().length > 0) {
+      const validation = validateName(rawValue);
+      setValidationError(validation.error);
+    } else {
+      setValidationError(undefined);
+    }
+  };
 
   const isComplete = () => {
-    return studentName.trim().length >= 2;
+    const validation = validateName(studentName);
+    return validation.isValid;
   };
 
   return (
@@ -33,13 +92,21 @@ export function NameForm() {
           id="studentName"
           placeholder="Enter your full name"
           value={studentName}
-          onChange={(e) => setStudentName(e.target.value)}
+          onChange={handleNameChange}
           className="text-lg h-12"
           autoFocus
+          maxLength={MAX_NAME_LENGTH}
+          aria-describedby="name-hint name-error"
         />
-        <p className="text-sm text-muted-foreground mt-2">
-          This will appear on your results dashboard.
-        </p>
+        {validationError ? (
+          <p id="name-error" className="text-sm text-destructive mt-2" role="alert">
+            {validationError}
+          </p>
+        ) : (
+          <p id="name-hint" className="text-sm text-muted-foreground mt-2">
+            This will appear on your results dashboard. ({MAX_NAME_LENGTH - studentName.length} characters remaining)
+          </p>
+        )}
       </div>
 
       {/* Navigation */}
