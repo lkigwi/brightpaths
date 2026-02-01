@@ -1,4 +1,4 @@
-// Bright Paths Data - CBC Kenya Pathways, Subjects, and Careers
+// Bright Paths Data - CBE Kenya Pathways, Subjects, and Careers
 
 export type Pathway = 'STEM' | 'Social Sciences' | 'Arts & Sports';
 
@@ -27,7 +27,7 @@ export interface QuizQuestion {
   }[];
 }
 
-// CBC Subject Clusters and Codes
+// CBE Subject Clusters and Codes
 export const subjects: Subject[] = [
   // STEM Pathway
   { code: 'ST1001', name: 'Mathematics', pathway: 'STEM', cluster: 'Core Sciences' },

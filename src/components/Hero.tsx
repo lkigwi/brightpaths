@@ -25,7 +25,7 @@ export function Hero() {
           {/* Subtitle */}
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-in" style={{ animationDelay: '0.2s' }}>
             A smart decision-support system that analyzes your interests and Kenya's 2026 
-            job market to recommend your ideal CBC pathway.
+            job market to recommend your ideal CBE pathway.
           </p>
 
           {/* CTA Buttons */}
