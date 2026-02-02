@@ -35,6 +35,9 @@ export function Header() {
             <Link to="/careers" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Careers
             </Link>
+            <Link to="/results" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              Results
+            </Link>
           </nav>
 
           {/* CTA Button */}
@@ -84,6 +87,13 @@ export function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Careers
+              </Link>
+              <Link 
+                to="/results" 
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Results
               </Link>
               <Button onClick={() => { navigate('/assessment'); setIsMenuOpen(false); }} className="w-full">
                 Start Assessment

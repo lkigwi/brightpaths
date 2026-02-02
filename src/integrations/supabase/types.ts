@@ -14,7 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      assessment_results: {
+        Row: {
+          arts_sports_percentage: number
+          confidence: string
+          created_at: string
+          id: string
+          recommended_careers: Json
+          recommended_subjects: Json
+          social_sciences_percentage: number
+          stem_percentage: number
+          student_name: string
+          top_pathway: string
+          top_pathway_percentage: number
+        }
+        Insert: {
+          arts_sports_percentage: number
+          confidence: string
+          created_at?: string
+          id?: string
+          recommended_careers?: Json
+          recommended_subjects?: Json
+          social_sciences_percentage: number
+          stem_percentage: number
+          student_name: string
+          top_pathway: string
+          top_pathway_percentage: number
+        }
+        Update: {
+          arts_sports_percentage?: number
+          confidence?: string
+          created_at?: string
+          id?: string
+          recommended_careers?: Json
+          recommended_subjects?: Json
+          social_sciences_percentage?: number
+          stem_percentage?: number
+          student_name?: string
+          top_pathway?: string
+          top_pathway_percentage?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
