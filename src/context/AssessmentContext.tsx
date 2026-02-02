@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { QuizAnswers, FullResults, predictPathwayFromQuizOnly } from '@/lib/algorithm';
 import { Pathway, QuizQuestion, getRandomQuizQuestions } from '@/lib/data';
+import { supabase } from '@/integrations/supabase/client';
 
 interface AssessmentContextType {
   // State
@@ -34,9 +35,34 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
     }));
   };
 
+  const saveResultsToDatabase = async (fullResults: FullResults, name: string) => {
+    try {
+      const pathwayPercentages = {
+        stem: fullResults.pathways.find(p => p.pathway === 'STEM')?.percentage || 0,
+        social: fullResults.pathways.find(p => p.pathway === 'Social Sciences')?.percentage || 0,
+        arts: fullResults.pathways.find(p => p.pathway === 'Arts & Sports')?.percentage || 0,
+      };
+
+      await supabase.from('assessment_results').insert([{
+        student_name: name || 'Anonymous',
+        top_pathway: fullResults.pathways[0].pathway,
+        top_pathway_percentage: fullResults.pathways[0].percentage,
+        stem_percentage: pathwayPercentages.stem,
+        social_sciences_percentage: pathwayPercentages.social,
+        arts_sports_percentage: pathwayPercentages.arts,
+        confidence: fullResults.confidence,
+        recommended_subjects: JSON.parse(JSON.stringify(fullResults.recommendedSubjects)),
+        recommended_careers: JSON.parse(JSON.stringify(fullResults.recommendedCareers)),
+      }]);
+    } catch (error) {
+      console.error('Error saving results:', error);
+    }
+  };
+
   const calculateResults = () => {
     const fullResults = predictPathwayFromQuizOnly(quizAnswers);
     setResults(fullResults);
+    saveResultsToDatabase(fullResults, studentName);
   };
 
   const resetAssessment = () => {
@@ -44,7 +70,7 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
     setStudentName('');
     setQuizAnswers({});
     setResults(null);
-    setCurrentQuestions(getRandomQuizQuestions(15)); // Get new random questions
+    setCurrentQuestions(getRandomQuizQuestions(15));
   };
 
   return (
