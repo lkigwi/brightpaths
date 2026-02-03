@@ -15,9 +15,21 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Users, TrendingUp, Calendar, Atom, Scale, Palette, LogOut, Lock } from 'lucide-react';
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { Users, TrendingUp, Calendar, Atom, Scale, Palette, LogOut, Lock, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { toast } from '@/hooks/use-toast';
 
 interface AssessmentResult {
   id: string;
@@ -76,6 +88,67 @@ export default function Results() {
       console.error('Error fetching results:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteResult = async (id: string, studentName: string) => {
+    try {
+      const { error } = await supabase
+        .from('assessment_results')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setResults(prev => prev.filter(r => r.id !== id));
+      setStats(prev => {
+        const deleted = results.find(r => r.id === id);
+        if (!deleted) return prev;
+        return {
+          total: prev.total - 1,
+          stem: deleted.top_pathway === 'STEM' ? prev.stem - 1 : prev.stem,
+          social: deleted.top_pathway === 'Social Sciences' ? prev.social - 1 : prev.social,
+          arts: deleted.top_pathway === 'Arts & Sports' ? prev.arts - 1 : prev.arts,
+        };
+      });
+
+      toast({
+        title: 'Result deleted',
+        description: `Assessment for ${studentName} has been removed.`,
+      });
+    } catch (error) {
+      console.error('Error deleting result:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete the result. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleDeleteAll = async () => {
+    try {
+      const { error } = await supabase
+        .from('assessment_results')
+        .delete()
+        .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all rows
+
+      if (error) throw error;
+
+      setResults([]);
+      setStats({ total: 0, stem: 0, social: 0, arts: 0 });
+
+      toast({
+        title: 'All results deleted',
+        description: 'All assessment results have been removed.',
+      });
+    } catch (error) {
+      console.error('Error deleting all results:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to delete results. Please try again.',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -140,10 +213,36 @@ export default function Results() {
               View all student pathway recommendations from the CBE assessment
             </p>
           </div>
-          <Button variant="outline" onClick={handleLogout}>
-            <LogOut className="w-4 h-4 mr-2" />
-            Logout
-          </Button>
+          <div className="flex gap-2">
+            {results.length > 0 && (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive">
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Delete All
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete all results?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will permanently delete all {stats.total} assessment results. This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDeleteAll} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                      Delete All
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
+            <Button variant="outline" onClick={handleLogout}>
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </Button>
+          </div>
         </div>
 
         {/* Stats Cards */}
@@ -200,6 +299,7 @@ export default function Results() {
                   <TableHead className="hidden md:table-cell">Match %</TableHead>
                   <TableHead className="hidden lg:table-cell">Confidence</TableHead>
                   <TableHead className="hidden md:table-cell">Date</TableHead>
+                  <TableHead className="w-[50px]"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -241,6 +341,32 @@ export default function Results() {
                           <Calendar className="w-3 h-3" />
                           {format(new Date(result.created_at), 'MMM d, yyyy')}
                         </div>
+                      </TableCell>
+                      <TableCell>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-destructive">
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete result?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                This will permanently delete the assessment result for {result.student_name}. This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction 
+                                onClick={() => handleDeleteResult(result.id, result.student_name)}
+                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                              >
+                                Delete
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </TableCell>
                     </TableRow>
                   );
