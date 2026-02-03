@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { 
   Table, 
@@ -11,8 +13,9 @@ import {
   TableRow 
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Users, TrendingUp, Calendar, Atom, Scale, Palette } from 'lucide-react';
+import { Users, TrendingUp, Calendar, Atom, Scale, Palette, LogOut, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 
@@ -35,13 +38,21 @@ const pathwayColors = {
 };
 
 export default function Results() {
+  const { user, isAdmin, isLoading: authLoading, signOut } = useAuth();
+  const navigate = useNavigate();
   const [results, setResults] = useState<AssessmentResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ total: 0, stem: 0, social: 0, arts: 0 });
 
   useEffect(() => {
-    fetchResults();
-  }, []);
+    if (!authLoading && !user) {
+      navigate('/login');
+    } else if (!authLoading && user && !isAdmin) {
+      navigate('/login');
+    } else if (!authLoading && isAdmin) {
+      fetchResults();
+    }
+  }, [authLoading, user, isAdmin, navigate]);
 
   const fetchResults = async () => {
     try {
@@ -55,7 +66,6 @@ export default function Results() {
       if (data) {
         setResults(data);
         
-        // Calculate stats
         const total = data.length;
         const stem = data.filter(r => r.top_pathway === 'STEM').length;
         const social = data.filter(r => r.top_pathway === 'Social Sciences').length;
@@ -69,19 +79,71 @@ export default function Results() {
     }
   };
 
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/');
+  };
+
+  // Show loading state while checking auth
+  if (authLoading) {
+    return (
+      <div className="min-h-screen pt-20">
+        <Header />
+        <main className="container mx-auto px-4 py-12">
+          <div className="max-w-md mx-auto text-center">
+            <Skeleton className="h-16 w-16 rounded-2xl mx-auto mb-4" />
+            <Skeleton className="h-8 w-48 mx-auto mb-2" />
+            <Skeleton className="h-4 w-64 mx-auto" />
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Show access denied if not admin
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen pt-20">
+        <Header />
+        <main className="container mx-auto px-4 py-12">
+          <div className="max-w-md mx-auto text-center">
+            <div className="w-16 h-16 bg-destructive/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Lock className="w-8 h-8 text-destructive" />
+            </div>
+            <h1 className="font-display text-2xl font-bold mb-2">Access Denied</h1>
+            <p className="text-muted-foreground mb-6">
+              You need admin privileges to view assessment results.
+            </p>
+            <Button onClick={() => navigate('/login')}>
+              Sign in as Admin
+            </Button>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen pt-20">
       <Header />
       
       <main className="container mx-auto px-4 py-12">
         {/* Page Header */}
-        <div className="text-center mb-12">
-          <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">
-            Assessment Results
-          </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            View all student pathway recommendations from the CBE assessment
-          </p>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+          <div>
+            <h1 className="font-display text-3xl md:text-4xl font-bold mb-2">
+              Assessment Results
+            </h1>
+            <p className="text-muted-foreground">
+              View all student pathway recommendations from the CBE assessment
+            </p>
+          </div>
+          <Button variant="outline" onClick={handleLogout}>
+            <LogOut className="w-4 h-4 mr-2" />
+            Logout
+          </Button>
         </div>
 
         {/* Stats Cards */}
@@ -127,7 +189,7 @@ export default function Results() {
             <div className="p-12 text-center text-muted-foreground">
               <Users className="w-12 h-12 mx-auto mb-4 opacity-50" />
               <p>No assessment results yet.</p>
-              <p className="text-sm">Be the first to complete the assessment!</p>
+              <p className="text-sm">Waiting for students to complete the assessment.</p>
             </div>
           ) : (
             <Table>
