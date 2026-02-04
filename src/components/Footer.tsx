@@ -1,5 +1,6 @@
-import { GraduationCap, Heart } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import logo from '@/assets/logo.png';
 
 export function Footer() {
   return (
@@ -9,12 +10,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
-                <GraduationCap className="w-6 h-6 text-primary-foreground" />
-              </div>
-            <span className="font-display font-bold text-xl">
-              Bright<span className="text-primary">Paths</span>
-              </span>
+              <img src={logo} alt="Bright Paths Logo" className="h-12 w-auto" />
             </Link>
             <p className="text-background/70 max-w-md">
               An algorithmic decision-support system helping Kenyan Grade 9 learners 
