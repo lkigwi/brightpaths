@@ -63,8 +63,10 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
         recommended_subjects: JSON.parse(JSON.stringify(fullResults.recommendedSubjects)),
         recommended_careers: JSON.parse(JSON.stringify(fullResults.recommendedCareers)),
       }]);
-    } catch {
-      console.error('Failed to save assessment results');
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error('Failed to save assessment results:', error);
+      }
     }
   };
 
