@@ -10,6 +10,7 @@ interface AssessmentContextType {
   quizAnswers: QuizAnswers;
   results: FullResults | null;
   currentQuestions: QuizQuestion[];
+  assessmentId: string | null;
   
   // Actions
   setCurrentStep: (step: number) => void;
@@ -27,6 +28,7 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
   const [quizAnswers, setQuizAnswers] = useState<QuizAnswers>({});
   const [results, setResults] = useState<FullResults | null>(null);
   const [currentQuestions, setCurrentQuestions] = useState<QuizQuestion[]>(() => getRandomQuizQuestions(15));
+  const [assessmentId, setAssessmentId] = useState<string | null>(null);
 
   const setQuizAnswer = (questionId: number, pathway: Pathway | null) => {
     setQuizAnswers(prev => ({
@@ -51,7 +53,7 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
         arts: fullResults.pathways.find(p => p.pathway === 'Arts & Sports')?.percentage || 0,
       };
 
-      await supabase.from('assessment_results').insert([{
+      const { data, error } = await supabase.from('assessment_results').insert([{
         user_id: user.id,
         student_name: name || 'Anonymous',
         top_pathway: fullResults.pathways[0].pathway,
@@ -62,7 +64,11 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
         confidence: fullResults.confidence,
         recommended_subjects: JSON.parse(JSON.stringify(fullResults.recommendedSubjects)),
         recommended_careers: JSON.parse(JSON.stringify(fullResults.recommendedCareers)),
-      }]);
+      }]).select('id').single();
+      
+      if (!error && data) {
+        setAssessmentId(data.id);
+      }
     } catch {
       // Error handled silently - user sees toast if needed
     }
@@ -80,6 +86,7 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
     setQuizAnswers({});
     setResults(null);
     setCurrentQuestions(getRandomQuizQuestions(15));
+    setAssessmentId(null);
   };
 
   return (
@@ -90,6 +97,7 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
         quizAnswers,
         results,
         currentQuestions,
+        assessmentId,
         setCurrentStep,
         setStudentName,
         setQuizAnswer,
