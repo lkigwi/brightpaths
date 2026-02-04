@@ -84,8 +84,8 @@ export default function Results() {
         const arts = data.filter(r => r.top_pathway === 'Arts & Sports').length;
         setStats({ total, stem, social, arts });
       }
-    } catch (error) {
-      console.error('Error fetching results:', error);
+    } catch {
+      console.error('Failed to fetch results');
     } finally {
       setLoading(false);
     }
@@ -116,8 +116,8 @@ export default function Results() {
         title: 'Result deleted',
         description: `Assessment for ${studentName} has been removed.`,
       });
-    } catch (error) {
-      console.error('Error deleting result:', error);
+    } catch {
+      console.error('Failed to delete result');
       toast({
         title: 'Error',
         description: 'Failed to delete the result. Please try again.',
@@ -142,8 +142,8 @@ export default function Results() {
         title: 'All results deleted',
         description: 'All assessment results have been removed.',
       });
-    } catch (error) {
-      console.error('Error deleting all results:', error);
+    } catch {
+      console.error('Failed to delete results');
       toast({
         title: 'Error',
         description: 'Failed to delete results. Please try again.',
