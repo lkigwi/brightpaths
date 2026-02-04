@@ -5,10 +5,11 @@ import { Label } from '@/components/ui/label';
 import { MessageSquare, Send, Star, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
+import { useAssessment } from '@/context/AssessmentContext';
 
 // Input validation constants
 const MAX_COMMENT_LENGTH = 1000;
-const MIN_COMMENT_LENGTH = 0;
 
 // Sanitize comment input
 const sanitizeComment = (input: string): string => {
@@ -17,9 +18,11 @@ const sanitizeComment = (input: string): string => {
 };
 
 export function Feedback() {
+  const { assessmentId } = useAssessment();
   const [rating, setRating] = useState<number | null>(null);
   const [comment, setComment] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [hoveredRating, setHoveredRating] = useState<number | null>(null);
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -29,19 +32,31 @@ export function Feedback() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (rating === null) {
       toast.error('Please select a rating before submitting');
       return;
     }
 
+    setIsSubmitting(true);
     const sanitizedComment = sanitizeComment(comment);
-    
-    // In a real app, this would send to a backend
-    console.log('Feedback submitted:', { rating, comment: sanitizedComment });
-    
-    setIsSubmitted(true);
-    toast.success('Thank you for your feedback!');
+
+    try {
+      const { error } = await supabase.from('feedback').insert({
+        assessment_id: assessmentId || null,
+        rating,
+        comment: sanitizedComment || null,
+      });
+
+      if (error) throw error;
+
+      setIsSubmitted(true);
+      toast.success('Thank you for your feedback!');
+    } catch {
+      toast.error('Failed to submit feedback. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleReset = () => {
@@ -162,11 +177,11 @@ export function Feedback() {
               <Button 
                 onClick={handleSubmit}
                 size="lg"
-                disabled={rating === null}
+                disabled={rating === null || isSubmitting}
                 className="px-8"
               >
                 <Send className="w-4 h-4 mr-2" />
-                Submit Feedback
+                {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
               </Button>
             </div>
           </div>

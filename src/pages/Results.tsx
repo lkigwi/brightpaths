@@ -26,10 +26,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Users, TrendingUp, Calendar, Atom, Scale, Palette, LogOut, Lock, Trash2 } from 'lucide-react';
+import { Users, TrendingUp, Calendar, Atom, Scale, Palette, LogOut, Lock, Trash2, Star, MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { toast } from '@/hooks/use-toast';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 interface AssessmentResult {
   id: string;
@@ -40,6 +41,14 @@ interface AssessmentResult {
   social_sciences_percentage: number;
   arts_sports_percentage: number;
   confidence: string;
+  created_at: string;
+  feedback?: FeedbackData | null;
+}
+
+interface FeedbackData {
+  id: string;
+  rating: number;
+  comment: string | null;
   created_at: string;
 }
 
@@ -55,6 +64,8 @@ export default function Results() {
   const [results, setResults] = useState<AssessmentResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ total: 0, stem: 0, social: 0, arts: 0 });
+  const [selectedFeedback, setSelectedFeedback] = useState<FeedbackData | null>(null);
+  const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -68,20 +79,42 @@ export default function Results() {
 
   const fetchResults = async () => {
     try {
-      const { data, error } = await supabase
+      // Fetch assessment results
+      const { data: assessmentsData, error: assessmentsError } = await supabase
         .from('assessment_results')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (assessmentsError) throw assessmentsError;
 
-      if (data) {
-        setResults(data);
+      // Fetch all feedback
+      const { data: feedbackData, error: feedbackError } = await supabase
+        .from('feedback')
+        .select('*');
+
+      if (feedbackError) throw feedbackError;
+
+      // Map feedback to assessments
+      const feedbackMap = new Map<string, FeedbackData>();
+      if (feedbackData) {
+        feedbackData.forEach((fb: FeedbackData & { assessment_id: string }) => {
+          if (fb.assessment_id) {
+            feedbackMap.set(fb.assessment_id, fb);
+          }
+        });
+      }
+
+      if (assessmentsData) {
+        const resultsWithFeedback = assessmentsData.map(r => ({
+          ...r,
+          feedback: feedbackMap.get(r.id) || null,
+        }));
+        setResults(resultsWithFeedback);
         
-        const total = data.length;
-        const stem = data.filter(r => r.top_pathway === 'STEM').length;
-        const social = data.filter(r => r.top_pathway === 'Social Sciences').length;
-        const arts = data.filter(r => r.top_pathway === 'Arts & Sports').length;
+        const total = assessmentsData.length;
+        const stem = assessmentsData.filter(r => r.top_pathway === 'STEM').length;
+        const social = assessmentsData.filter(r => r.top_pathway === 'Social Sciences').length;
+        const arts = assessmentsData.filter(r => r.top_pathway === 'Arts & Sports').length;
         setStats({ total, stem, social, arts });
       }
     } catch {
@@ -155,6 +188,10 @@ export default function Results() {
     navigate('/');
   };
 
+  const handleViewFeedback = (feedback: FeedbackData) => {
+    setSelectedFeedback(feedback);
+    setFeedbackDialogOpen(true);
+  };
   // Show loading state while checking auth
   if (authLoading) {
     return (
@@ -297,6 +334,7 @@ export default function Results() {
                   <TableHead className="hidden md:table-cell">Match %</TableHead>
                   <TableHead className="hidden lg:table-cell">Confidence</TableHead>
                   <TableHead className="hidden md:table-cell">Date</TableHead>
+                  <TableHead className="hidden sm:table-cell">Feedback</TableHead>
                   <TableHead className="w-[50px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -340,6 +378,21 @@ export default function Results() {
                           {format(new Date(result.created_at), 'MMM d, yyyy')}
                         </div>
                       </TableCell>
+                      <TableCell className="hidden sm:table-cell">
+                        {result.feedback ? (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="gap-1 text-primary hover:text-primary"
+                            onClick={() => handleViewFeedback(result.feedback!)}
+                          >
+                            <Star className="w-3 h-3 fill-current" />
+                            {result.feedback.rating}/10
+                          </Button>
+                        ) : (
+                          <span className="text-muted-foreground text-sm">—</span>
+                        )}
+                      </TableCell>
                       <TableCell>
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
@@ -374,6 +427,42 @@ export default function Results() {
           )}
         </div>
       </main>
+
+      {/* Feedback Dialog */}
+      <Dialog open={feedbackDialogOpen} onOpenChange={setFeedbackDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-primary" />
+              Student Feedback
+            </DialogTitle>
+          </DialogHeader>
+          {selectedFeedback && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-center">
+                <div className="flex items-center gap-2 px-4 py-3 bg-primary/10 rounded-xl">
+                  <Star className="w-5 h-5 text-primary fill-current" />
+                  <span className="text-2xl font-bold text-primary">{selectedFeedback.rating}</span>
+                  <span className="text-muted-foreground">/10</span>
+                </div>
+              </div>
+              {selectedFeedback.comment ? (
+                <div className="bg-muted/50 rounded-xl p-4">
+                  <p className="text-sm font-medium text-muted-foreground mb-2">Comment</p>
+                  <p className="text-foreground">{selectedFeedback.comment}</p>
+                </div>
+              ) : (
+                <p className="text-center text-muted-foreground text-sm">
+                  No comment provided
+                </p>
+              )}
+              <p className="text-xs text-muted-foreground text-center">
+                Submitted on {format(new Date(selectedFeedback.created_at), 'MMM d, yyyy h:mm a')}
+              </p>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>
