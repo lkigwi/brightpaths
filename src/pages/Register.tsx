@@ -67,10 +67,11 @@ export default function Register() {
                   <Input
                     id="inviteCode"
                     type="text"
-                    placeholder="Enter your invite code"
+                    placeholder="Enter your 32+ character invite code"
                     value={inviteCode}
-                    onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
-                    className="pl-10 uppercase"
+                    onChange={(e) => setInviteCode(e.target.value)}
+                    className="pl-10"
+                    minLength={32}
                     required
                   />
                 </div>
