@@ -76,16 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signUp = async (email: string, password: string, displayName: string, inviteCode: string) => {
-    // First validate and use the invite code
-    const { data: roleData, error: codeError } = await supabase.rpc('use_invite_code', {
-      invite_code: inviteCode
-    });
-
-    if (codeError || !roleData) {
-      return { error: new Error('Invalid or expired invite code') };
-    }
-
-    // Sign up the user
+    // Sign up the user first
     const { data: authData, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
@@ -93,6 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         emailRedirectTo: window.location.origin,
         data: {
           display_name: displayName,
+          invite_code: inviteCode, // Store invite code to validate after email confirmation
         },
       },
     });
@@ -101,12 +93,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { error: signUpError as Error };
     }
 
-    // Assign the role from the invite code
-    if (authData.user) {
-      await supabase.rpc('assign_user_role', {
-        target_user_id: authData.user.id,
-        target_role: roleData
+    // If user is immediately confirmed (e.g., in dev), use the invite code now
+    // The use_invite_code function handles role assignment internally
+    if (authData.user && authData.session) {
+      const { data: roleData, error: codeError } = await supabase.rpc('use_invite_code', {
+        invite_code: inviteCode
       });
+
+      if (codeError || !roleData) {
+        // Sign out the user since they don't have a valid invite code
+        await supabase.auth.signOut();
+        return { error: new Error('Invalid or expired invite code') };
+      }
     }
 
     return { error: null };
