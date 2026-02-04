@@ -27,6 +27,7 @@ export type Database = {
           student_name: string
           top_pathway: string
           top_pathway_percentage: number
+          user_id: string | null
         }
         Insert: {
           arts_sports_percentage: number
@@ -40,6 +41,7 @@ export type Database = {
           student_name: string
           top_pathway: string
           top_pathway_percentage: number
+          user_id?: string | null
         }
         Update: {
           arts_sports_percentage?: number
@@ -53,6 +55,7 @@ export type Database = {
           student_name?: string
           top_pathway?: string
           top_pathway_percentage?: number
+          user_id?: string | null
         }
         Relationships: []
       }
