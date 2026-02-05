@@ -26,11 +26,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Users, TrendingUp, Calendar, Atom, Scale, Palette, LogOut, Lock, Trash2, Star, MessageSquare } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Users, TrendingUp, Calendar, Atom, Scale, Palette, LogOut, Lock, Trash2, Star, MessageSquare, BarChart3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { toast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { StatisticsChart } from '@/components/admin/StatisticsChart';
 
 interface AssessmentResult {
   id: string;
@@ -280,29 +282,43 @@ export default function Results() {
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-card rounded-2xl shadow-card p-6 text-center">
-            <Users className="w-8 h-8 mx-auto mb-2 text-primary" />
-            <p className="text-2xl font-bold">{stats.total}</p>
-            <p className="text-sm text-muted-foreground">Total Assessments</p>
-          </div>
-          <div className="bg-stem-light rounded-2xl p-6 text-center">
-            <Atom className="w-8 h-8 mx-auto mb-2 text-stem" />
-            <p className="text-2xl font-bold text-stem">{stats.stem}</p>
-            <p className="text-sm text-muted-foreground">STEM</p>
-          </div>
-          <div className="bg-social-light rounded-2xl p-6 text-center">
-            <Scale className="w-8 h-8 mx-auto mb-2 text-social" />
-            <p className="text-2xl font-bold text-social">{stats.social}</p>
-            <p className="text-sm text-muted-foreground">Social Sciences</p>
-          </div>
-          <div className="bg-arts-light rounded-2xl p-6 text-center">
-            <Palette className="w-8 h-8 mx-auto mb-2 text-arts" />
-            <p className="text-2xl font-bold text-arts">{stats.arts}</p>
-            <p className="text-sm text-muted-foreground">Arts & Sports</p>
-          </div>
-        </div>
+        {/* Tabs for Results and Statistics */}
+        <Tabs defaultValue="results" className="space-y-6">
+          <TabsList className="grid w-full max-w-md grid-cols-2">
+            <TabsTrigger value="results" className="gap-2">
+              <TrendingUp className="w-4 h-4" />
+              Results
+            </TabsTrigger>
+            <TabsTrigger value="statistics" className="gap-2">
+              <BarChart3 className="w-4 h-4" />
+              Statistics
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="results" className="space-y-6">
+            {/* Stats Cards */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-card rounded-2xl shadow-card p-6 text-center">
+                <Users className="w-8 h-8 mx-auto mb-2 text-primary" />
+                <p className="text-2xl font-bold">{stats.total}</p>
+                <p className="text-sm text-muted-foreground">Total Assessments</p>
+              </div>
+              <div className="bg-stem-light rounded-2xl p-6 text-center">
+                <Atom className="w-8 h-8 mx-auto mb-2 text-stem" />
+                <p className="text-2xl font-bold text-stem">{stats.stem}</p>
+                <p className="text-sm text-muted-foreground">STEM</p>
+              </div>
+              <div className="bg-social-light rounded-2xl p-6 text-center">
+                <Scale className="w-8 h-8 mx-auto mb-2 text-social" />
+                <p className="text-2xl font-bold text-social">{stats.social}</p>
+                <p className="text-sm text-muted-foreground">Social Sciences</p>
+              </div>
+              <div className="bg-arts-light rounded-2xl p-6 text-center">
+                <Palette className="w-8 h-8 mx-auto mb-2 text-arts" />
+                <p className="text-2xl font-bold text-arts">{stats.arts}</p>
+                <p className="text-sm text-muted-foreground">Arts & Sports</p>
+              </div>
+            </div>
 
         {/* Results Table */}
         <div className="bg-card rounded-2xl shadow-card overflow-hidden">
@@ -426,6 +442,12 @@ export default function Results() {
             </Table>
           )}
         </div>
+          </TabsContent>
+
+          <TabsContent value="statistics">
+            <StatisticsChart />
+          </TabsContent>
+        </Tabs>
       </main>
 
       {/* Feedback Dialog */}
