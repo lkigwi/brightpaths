@@ -27,7 +27,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Users, TrendingUp, Calendar, Atom, Scale, Palette, LogOut, Lock, Trash2, Star, MessageSquare, BarChart3 } from 'lucide-react';
+import { Users, TrendingUp, Calendar, Atom, Scale, Palette, LogOut, Lock, Trash2, Star, MessageSquare, BarChart3, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { toast } from '@/hooks/use-toast';
@@ -54,6 +54,12 @@ interface FeedbackData {
   created_at: string;
 }
 
+interface AdminUser {
+  user_id: string;
+  display_name: string | null;
+  created_at: string;
+}
+
 const pathwayColors = {
   'STEM': { bg: 'bg-stem-light', text: 'text-stem', icon: Atom },
   'Social Sciences': { bg: 'bg-social-light', text: 'text-social', icon: Scale },
@@ -68,6 +74,7 @@ export default function Results() {
   const [stats, setStats] = useState({ total: 0, stem: 0, social: 0, arts: 0 });
   const [selectedFeedback, setSelectedFeedback] = useState<FeedbackData | null>(null);
   const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
+  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -95,6 +102,24 @@ export default function Results() {
         .select('*');
 
       if (feedbackError) throw feedbackError;
+
+      // Fetch admin users
+      const { data: rolesData } = await supabase
+        .from('user_roles')
+        .select('user_id, role')
+        .eq('role', 'admin');
+
+      if (rolesData && rolesData.length > 0) {
+        const userIds = rolesData.map(r => r.user_id);
+        const { data: profilesData } = await supabase
+          .from('profiles')
+          .select('user_id, display_name, created_at')
+          .in('user_id', userIds);
+
+        if (profilesData) {
+          setAdminUsers(profilesData);
+        }
+      }
 
       // Map feedback to assessments
       const feedbackMap = new Map<string, FeedbackData>();
@@ -284,7 +309,7 @@ export default function Results() {
 
         {/* Tabs for Results and Statistics */}
         <Tabs defaultValue="results" className="space-y-6">
-          <TabsList className="grid w-full max-w-md grid-cols-2">
+          <TabsList className="grid w-full max-w-md grid-cols-3">
             <TabsTrigger value="results" className="gap-2">
               <TrendingUp className="w-4 h-4" />
               Results
@@ -292,6 +317,10 @@ export default function Results() {
             <TabsTrigger value="statistics" className="gap-2">
               <BarChart3 className="w-4 h-4" />
               Statistics
+            </TabsTrigger>
+            <TabsTrigger value="admins" className="gap-2">
+              <Shield className="w-4 h-4" />
+              Admins
             </TabsTrigger>
           </TabsList>
 
@@ -446,6 +475,56 @@ export default function Results() {
 
           <TabsContent value="statistics">
             <StatisticsChart />
+          </TabsContent>
+
+          <TabsContent value="admins">
+            <div className="bg-card rounded-2xl shadow-card overflow-hidden">
+              <div className="p-6 border-b">
+                <h2 className="font-display text-xl font-semibold flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-primary" />
+                  Registered Admin Users
+                </h2>
+              </div>
+              {adminUsers.length === 0 ? (
+                <div className="p-12 text-center text-muted-foreground">
+                  <Shield className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                  <p>No admin users found.</p>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Display Name</TableHead>
+                      <TableHead>Role</TableHead>
+                      <TableHead>Joined</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {adminUsers.map((admin) => (
+                      <TableRow key={admin.user_id}>
+                        <TableCell className="font-medium">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                              <Shield className="w-4 h-4 text-primary" />
+                            </div>
+                            {admin.display_name || 'Unknown'}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Badge className="bg-primary/10 text-primary">Admin</Badge>
+                        </TableCell>
+                        <TableCell className="text-muted-foreground text-sm">
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-3 h-3" />
+                            {format(new Date(admin.created_at), 'MMM d, yyyy')}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </div>
           </TabsContent>
         </Tabs>
       </main>
