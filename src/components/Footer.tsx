@@ -80,10 +80,10 @@ export function Footer() {
 
         <div className="border-t border-background/20 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-background/60 text-sm">
-            © 2024 Bright Paths. Built for KSEF 2024.
+            © 2026 BrightPaths. Built for KSEF 2026.
           </p>
           <p className="text-background/60 text-sm flex items-center gap-1">
-            Made with <Heart className="w-4 h-4 text-arts" /> for Kenyan Students
+            Made by Students, for Students <Heart className="w-4 h-4 text-arts" />
           </p>
         </div>
       </div>
