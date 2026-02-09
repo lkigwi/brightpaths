@@ -418,9 +418,14 @@ export default function Results() {
                         </Badge>
                       </TableCell>
                       <TableCell className="hidden md:table-cell text-muted-foreground text-sm">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-3 h-3" />
-                          {format(new Date(result.created_at), 'MMM d, yyyy')}
+                        <div className="flex flex-col gap-0.5">
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-3 h-3" />
+                            {format(new Date(result.created_at), 'MMM d, yyyy')}
+                          </div>
+                          <span className="text-xs opacity-75">
+                            {format(new Date(result.created_at), 'h:mm a')}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
