@@ -39,13 +39,8 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
 
   const saveResultsToDatabase = async (fullResults: FullResults, name: string) => {
     try {
-      // Get the current authenticated user
+      // Get the current authenticated user (optional - students may not be logged in)
       const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        console.error('User must be authenticated to save assessment results');
-        return;
-      }
 
       const pathwayPercentages = {
         stem: fullResults.pathways.find(p => p.pathway === 'STEM')?.percentage || 0,
@@ -54,7 +49,7 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
       };
 
       const { data, error } = await supabase.from('assessment_results').insert([{
-        user_id: user.id,
+        user_id: user?.id || null,
         student_name: name || 'Anonymous',
         top_pathway: fullResults.pathways[0].pathway,
         top_pathway_percentage: fullResults.pathways[0].percentage,
