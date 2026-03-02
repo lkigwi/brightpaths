@@ -106,12 +106,12 @@ export function Feedback() {
           </div>
 
           {/* Rating Section */}
-          <div className="bg-card rounded-2xl shadow-card p-8 mb-6">
+          <div className="bg-card rounded-2xl shadow-card p-5 sm:p-8 mb-6">
             <Label className="text-base font-semibold mb-4 block">
               How would you rate this website? (1-10)
             </Label>
             
-            <div className="flex flex-wrap justify-center gap-2 mb-2">
+            <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2 mb-2">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
                 <button
                   key={num}
@@ -119,8 +119,8 @@ export function Feedback() {
                   onMouseEnter={() => setHoveredRating(num)}
                   onMouseLeave={() => setHoveredRating(null)}
                   className={cn(
-                    "w-12 h-12 rounded-xl font-bold text-lg transition-all duration-200",
-                    "border-2 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+                    "w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl font-bold text-base sm:text-lg transition-all duration-200",
+                    "border-2 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 touch-manipulation",
                     rating === num
                       ? "bg-primary text-primary-foreground border-primary"
                       : hoveredRating !== null && num <= hoveredRating
@@ -151,7 +151,7 @@ export function Feedback() {
           </div>
 
           {/* Comment Section */}
-          <div className="bg-card rounded-2xl shadow-card p-8">
+          <div className="bg-card rounded-2xl shadow-card p-5 sm:p-8">
             <Label htmlFor="feedback-comment" className="text-base font-semibold mb-3 block">
               Share your thoughts (optional)
             </Label>
