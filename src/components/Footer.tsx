@@ -4,13 +4,13 @@ import logo from '@/assets/logo.png';
 
 export function Footer() {
   return (
-    <footer className="bg-foreground text-background py-16">
+    <footer className="bg-foreground text-background py-10 md:py-16">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <img src={logo} alt="Bright Paths Logo" className="h-12 w-auto" />
+              <img src={logo} alt="Bright Paths Logo" className="h-12 w-auto" width={48} height={48} />
             </Link>
             <p className="text-background/70 max-w-md">
               An algorithmic decision-support system helping Kenyan Grade 9 learners 

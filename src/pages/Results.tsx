@@ -316,16 +316,18 @@ export default function Results() {
 
         {/* Tabs for Results and Statistics */}
         <Tabs defaultValue="results" className="space-y-6">
-          <TabsList className="grid w-full max-w-md grid-cols-3">
-            <TabsTrigger value="results" className="gap-2">
+          <TabsList className="grid w-full max-w-md grid-cols-3 h-auto">
+            <TabsTrigger value="results" className="gap-1 sm:gap-2 text-xs sm:text-sm py-2">
               <TrendingUp className="w-4 h-4" />
-              Results
+              <span className="hidden sm:inline">Results</span>
+              <span className="sm:hidden">Results</span>
             </TabsTrigger>
-            <TabsTrigger value="statistics" className="gap-2">
+            <TabsTrigger value="statistics" className="gap-1 sm:gap-2 text-xs sm:text-sm py-2">
               <BarChart3 className="w-4 h-4" />
-              Statistics
+              <span className="hidden sm:inline">Statistics</span>
+              <span className="sm:hidden">Stats</span>
             </TabsTrigger>
-            <TabsTrigger value="admins" className="gap-2">
+            <TabsTrigger value="admins" className="gap-1 sm:gap-2 text-xs sm:text-sm py-2">
               <Shield className="w-4 h-4" />
               Admins
             </TabsTrigger>
@@ -333,31 +335,31 @@ export default function Results() {
 
           <TabsContent value="results" className="space-y-6">
             {/* Stats Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-card rounded-2xl shadow-card p-6 text-center">
-                <Users className="w-8 h-8 mx-auto mb-2 text-primary" />
-                <p className="text-2xl font-bold">{stats.total}</p>
-                <p className="text-sm text-muted-foreground">Total Assessments</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
+              <div className="bg-card rounded-xl sm:rounded-2xl shadow-card p-3 sm:p-6 text-center">
+                <Users className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 text-primary" />
+                <p className="text-xl sm:text-2xl font-bold">{stats.total}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Total</p>
               </div>
-              <div className="bg-stem-light rounded-2xl p-6 text-center">
-                <Atom className="w-8 h-8 mx-auto mb-2 text-stem" />
-                <p className="text-2xl font-bold text-stem">{stats.stem}</p>
-                <p className="text-sm text-muted-foreground">STEM</p>
+              <div className="bg-stem-light rounded-xl sm:rounded-2xl p-3 sm:p-6 text-center">
+                <Atom className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 text-stem" />
+                <p className="text-xl sm:text-2xl font-bold text-stem">{stats.stem}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">STEM</p>
               </div>
-              <div className="bg-social-light rounded-2xl p-6 text-center">
-                <Scale className="w-8 h-8 mx-auto mb-2 text-social" />
-                <p className="text-2xl font-bold text-social">{stats.social}</p>
-                <p className="text-sm text-muted-foreground">Social Sciences</p>
+              <div className="bg-social-light rounded-xl sm:rounded-2xl p-3 sm:p-6 text-center">
+                <Scale className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 text-social" />
+                <p className="text-xl sm:text-2xl font-bold text-social">{stats.social}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Social</p>
               </div>
-              <div className="bg-arts-light rounded-2xl p-6 text-center">
-                <Palette className="w-8 h-8 mx-auto mb-2 text-arts" />
-                <p className="text-2xl font-bold text-arts">{stats.arts}</p>
-                <p className="text-sm text-muted-foreground">Arts & Sports</p>
+              <div className="bg-arts-light rounded-xl sm:rounded-2xl p-3 sm:p-6 text-center">
+                <Palette className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 text-arts" />
+                <p className="text-xl sm:text-2xl font-bold text-arts">{stats.arts}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">Arts</p>
               </div>
             </div>
 
         {/* Results Table */}
-        <div className="bg-card rounded-2xl shadow-card overflow-hidden">
+        <div className="bg-card rounded-2xl shadow-card overflow-hidden overflow-x-auto">
           <div className="p-6 border-b">
             <h2 className="font-display text-xl font-semibold flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-primary" />
