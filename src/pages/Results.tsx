@@ -75,6 +75,8 @@ export default function Results() {
   const [selectedFeedback, setSelectedFeedback] = useState<FeedbackData | null>(null);
   const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
+  const [selectedResult, setSelectedResult] = useState<AssessmentResult | null>(null);
+  const [resultDialogOpen, setResultDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -218,6 +220,11 @@ export default function Results() {
   const handleViewFeedback = (feedback: FeedbackData) => {
     setSelectedFeedback(feedback);
     setFeedbackDialogOpen(true);
+  };
+
+  const handleViewResult = (result: AssessmentResult) => {
+    setSelectedResult(result);
+    setResultDialogOpen(true);
   };
   // Show loading state while checking auth
   if (authLoading) {
@@ -390,8 +397,13 @@ export default function Results() {
                   
                   return (
                     <TableRow key={result.id}>
-                      <TableCell className="font-medium">
-                        {result.student_name}
+                      <TableCell>
+                        <button
+                          className="font-medium text-left hover:text-primary hover:underline transition-colors cursor-pointer"
+                          onClick={() => handleViewResult(result)}
+                        >
+                          {result.student_name}
+                        </button>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
@@ -533,6 +545,102 @@ export default function Results() {
           </TabsContent>
         </Tabs>
       </main>
+
+      {/* Result Detail Dialog */}
+      <Dialog open={resultDialogOpen} onOpenChange={setResultDialogOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Users className="w-5 h-5 text-primary" />
+              {selectedResult?.student_name}'s Results
+            </DialogTitle>
+          </DialogHeader>
+          {selectedResult && (() => {
+            const info = pathwayColors[selectedResult.top_pathway as keyof typeof pathwayColors];
+            const TopIcon = info?.icon || Atom;
+            return (
+              <div className="space-y-5">
+                {/* Top Pathway */}
+                <div className="flex items-center gap-3 p-4 rounded-xl bg-primary/5 border">
+                  <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center", info?.bg)}>
+                    <TopIcon className={cn("w-5 h-5", info?.text)} />
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Top Pathway</p>
+                    <p className="font-semibold">{selectedResult.top_pathway}</p>
+                  </div>
+                  <Badge className={cn("ml-auto", info?.bg, info?.text)}>
+                    {selectedResult.top_pathway_percentage}% match
+                  </Badge>
+                </div>
+
+                {/* All Pathway Scores */}
+                <div className="space-y-3">
+                  <p className="text-sm font-medium text-muted-foreground">Pathway Breakdown</p>
+                  {[
+                    { name: 'STEM', pct: selectedResult.stem_percentage, key: 'STEM' as const },
+                    { name: 'Social Sciences', pct: selectedResult.social_sciences_percentage, key: 'Social Sciences' as const },
+                    { name: 'Arts & Sports', pct: selectedResult.arts_sports_percentage, key: 'Arts & Sports' as const },
+                  ].map(p => {
+                    const pInfo = pathwayColors[p.key];
+                    const PIcon = pInfo?.icon || Atom;
+                    return (
+                      <div key={p.key} className="flex items-center gap-3">
+                        <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center shrink-0", pInfo?.bg)}>
+                          <PIcon className={cn("w-4 h-4", pInfo?.text)} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex justify-between text-sm mb-1">
+                            <span>{p.name}</span>
+                            <span className="font-medium">{p.pct}%</span>
+                          </div>
+                          <div className="h-2 bg-muted rounded-full overflow-hidden">
+                            <div
+                              className={cn("h-full rounded-full transition-all", p.key === 'STEM' ? 'bg-stem' : p.key === 'Social Sciences' ? 'bg-social' : 'bg-arts')}
+                              style={{ width: `${p.pct}%` }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Confidence & Date */}
+                <div className="flex gap-4 text-sm">
+                  <div className="flex-1 p-3 rounded-lg bg-muted/50">
+                    <p className="text-muted-foreground mb-1">Confidence</p>
+                    <Badge variant={
+                      selectedResult.confidence === 'High' ? 'default' :
+                      selectedResult.confidence === 'Medium' ? 'secondary' : 'outline'
+                    }>
+                      {selectedResult.confidence}
+                    </Badge>
+                  </div>
+                  <div className="flex-1 p-3 rounded-lg bg-muted/50">
+                    <p className="text-muted-foreground mb-1">Date</p>
+                    <p className="font-medium">{format(new Date(selectedResult.created_at), 'MMM d, yyyy')}</p>
+                    <p className="text-xs text-muted-foreground">{format(new Date(selectedResult.created_at), 'h:mm a')}</p>
+                  </div>
+                </div>
+
+                {/* Feedback if available */}
+                {selectedResult.feedback && (
+                  <div className="p-3 rounded-lg bg-primary/5 border">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Star className="w-4 h-4 text-primary fill-current" />
+                      <span className="font-medium">{selectedResult.feedback.rating}/10</span>
+                    </div>
+                    {selectedResult.feedback.comment && (
+                      <p className="text-sm text-muted-foreground">{selectedResult.feedback.comment}</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
 
       {/* Feedback Dialog */}
       <Dialog open={feedbackDialogOpen} onOpenChange={setFeedbackDialogOpen}>
