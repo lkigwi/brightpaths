@@ -44,6 +44,8 @@ interface AssessmentResult {
   arts_sports_percentage: number;
   confidence: string;
   created_at: string;
+  recommended_subjects?: unknown;
+  recommended_careers?: unknown;
   feedback?: FeedbackData | null;
 }
 
@@ -607,6 +609,30 @@ export default function Results() {
                     );
                   })}
                 </div>
+
+                {/* Recommended Subjects */}
+                {selectedResult.recommended_subjects && Array.isArray(selectedResult.recommended_subjects) && (selectedResult.recommended_subjects as string[]).length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-muted-foreground">Recommended Subjects</p>
+                    <div className="flex flex-wrap gap-2">
+                      {(selectedResult.recommended_subjects as string[]).map((subject, i) => (
+                        <Badge key={i} variant="secondary" className="text-xs">{subject}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Recommended Careers */}
+                {selectedResult.recommended_careers && Array.isArray(selectedResult.recommended_careers) && (selectedResult.recommended_careers as string[]).length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-muted-foreground">Recommended Careers</p>
+                    <div className="flex flex-wrap gap-2">
+                      {(selectedResult.recommended_careers as string[]).map((career, i) => (
+                        <Badge key={i} variant="outline" className="text-xs">{career}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Confidence & Date */}
                 <div className="flex gap-4 text-sm">
