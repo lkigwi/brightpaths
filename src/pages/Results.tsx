@@ -69,7 +69,7 @@ const pathwayColors = {
 };
 
 export default function Results() {
-  const { user, isAdmin, isLoading: authLoading, signOut } = useAuth();
+  const { user, isLoading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
   const [results, setResults] = useState<AssessmentResult[]>([]);
   const [loading, setLoading] = useState(true);
@@ -79,16 +79,33 @@ export default function Results() {
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
   const [selectedResult, setSelectedResult] = useState<AssessmentResult | null>(null);
   const [resultDialogOpen, setResultDialogOpen] = useState(false);
+  const [accessDenied, setAccessDenied] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
       navigate('/login');
-    } else if (!authLoading && user && !isAdmin) {
-      navigate('/login');
-    } else if (!authLoading && isAdmin) {
-      fetchResults();
+    } else if (!authLoading && user) {
+      checkAdminAccess(user.id);
     }
-  }, [authLoading, user, isAdmin, navigate]);
+  }, [authLoading, user, navigate]);
+
+  const checkAdminAccess = async (userId: string) => {
+    const { data, error } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', userId)
+      .eq('role', 'admin')
+      .maybeSingle();
+
+    if (error || !data) {
+      setAccessDenied(true);
+      setLoading(false);
+      return;
+    }
+
+    setAccessDenied(false);
+    fetchResults();
+  };
 
   const fetchResults = async () => {
     try {
@@ -245,8 +262,8 @@ export default function Results() {
     );
   }
 
-  // Show access denied if not admin
-  if (!isAdmin) {
+  // Show access denied if role check fails
+  if (accessDenied) {
     return (
       <div className="min-h-screen pt-20">
         <Header />
