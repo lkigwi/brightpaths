@@ -611,24 +611,28 @@ export default function Results() {
                 </div>
 
                 {/* Recommended Subjects */}
-                {selectedResult.recommended_subjects && Array.isArray(selectedResult.recommended_subjects) && (selectedResult.recommended_subjects as string[]).length > 0 && (
+                {selectedResult.recommended_subjects && Array.isArray(selectedResult.recommended_subjects) && (selectedResult.recommended_subjects as unknown[]).length > 0 && (
                   <div className="space-y-2">
                     <p className="text-sm font-medium text-muted-foreground">Recommended Subjects</p>
                     <div className="flex flex-wrap gap-2">
-                      {(selectedResult.recommended_subjects as string[]).map((subject, i) => (
-                        <Badge key={i} variant="secondary" className="text-xs">{subject}</Badge>
+                      {(selectedResult.recommended_subjects as unknown[]).map((subject, i) => (
+                        <Badge key={i} variant="secondary" className="text-xs">
+                          {typeof subject === 'string' ? subject : (subject as { name?: string })?.name || JSON.stringify(subject)}
+                        </Badge>
                       ))}
                     </div>
                   </div>
                 )}
 
                 {/* Recommended Careers */}
-                {selectedResult.recommended_careers && Array.isArray(selectedResult.recommended_careers) && (selectedResult.recommended_careers as string[]).length > 0 && (
+                {selectedResult.recommended_careers && Array.isArray(selectedResult.recommended_careers) && (selectedResult.recommended_careers as unknown[]).length > 0 && (
                   <div className="space-y-2">
                     <p className="text-sm font-medium text-muted-foreground">Recommended Careers</p>
                     <div className="flex flex-wrap gap-2">
-                      {(selectedResult.recommended_careers as string[]).map((career, i) => (
-                        <Badge key={i} variant="outline" className="text-xs">{career}</Badge>
+                      {(selectedResult.recommended_careers as unknown[]).map((career, i) => (
+                        <Badge key={i} variant="outline" className="text-xs">
+                          {typeof career === 'string' ? career : (career as { title?: string })?.title || JSON.stringify(career)}
+                        </Badge>
                       ))}
                     </div>
                   </div>
