@@ -2,7 +2,7 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { careers, Pathway } from '@/lib/data';
-import { ArrowRight, TrendingUp, Briefcase, DollarSign, Zap } from 'lucide-react';
+import { ArrowRight, TrendingUp, Briefcase, DollarSign, Zap, GraduationCap, Building2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
@@ -125,10 +125,24 @@ export default function Careers() {
                 <div className="p-6">
                   <p className="text-muted-foreground text-sm mb-4">{career.description}</p>
                   
-                  <div className="flex items-center gap-2 mb-4">
+                  <div className="flex items-center gap-2 mb-3">
                     <DollarSign className="w-4 h-4 text-secondary" />
                     <span className="text-sm font-medium text-secondary">{career.salaryRange}</span>
                   </div>
+
+                  <div className="flex items-center gap-2 mb-3">
+                    <GraduationCap className="w-4 h-4 text-primary" />
+                    <span className="text-xs text-muted-foreground">{career.education}</span>
+                  </div>
+
+                  <div className="flex items-center gap-2 mb-3">
+                    <Building2 className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground">{career.industry}</span>
+                  </div>
+
+                  <p className="text-xs text-muted-foreground italic mb-4">
+                    📈 {career.outlook2026}
+                  </p>
                   
                   <div>
                     <div className="flex items-center gap-2 mb-2">

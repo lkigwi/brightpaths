@@ -184,10 +184,10 @@ export function ResultsDashboard() {
             Career Opportunities
           </h4>
           <div className="space-y-3">
-            {results.recommendedCareers.slice(0, 4).map((career) => (
+            {results.recommendedCareers.slice(0, 5).map((career) => (
               <div 
                 key={career.title}
-                className="p-3 bg-muted/50 rounded-xl"
+                className="p-4 bg-muted/50 rounded-xl"
               >
                 <div className="flex items-center justify-between mb-1">
                   <p className="font-medium">{career.title}</p>
@@ -201,8 +201,25 @@ export function ResultsDashboard() {
                     {career.growthRate}
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground mb-1">{career.description}</p>
-                <p className="text-sm font-medium text-primary">{career.salaryRange}</p>
+                <p className="text-sm text-muted-foreground mb-2">{career.description}</p>
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-primary">{career.salaryRange}</p>
+                  {'education' in career && (
+                    <p className="text-xs text-muted-foreground">
+                      <span className="font-medium">Education:</span> {(career as any).education}
+                    </p>
+                  )}
+                  {'industry' in career && (
+                    <p className="text-xs text-muted-foreground">
+                      <span className="font-medium">Industry:</span> {(career as any).industry}
+                    </p>
+                  )}
+                  {'outlook2026' in career && (
+                    <p className="text-xs text-muted-foreground italic mt-1">
+                      📈 {(career as any).outlook2026}
+                    </p>
+                  )}
+                </div>
               </div>
             ))}
           </div>
