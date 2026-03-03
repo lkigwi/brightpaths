@@ -4,7 +4,8 @@ import {
   Pathway, 
   jobMarketWeights, 
   subjects,
-  careers 
+  getRandomCareers,
+  type Career
 } from './data';
 
 export interface QuizAnswers {
@@ -22,7 +23,7 @@ export interface FullResults {
   pathways: PathwayResult[];
   recommendedPathway: Pathway;
   recommendedSubjects: typeof subjects;
-  recommendedCareers: typeof careers;
+  recommendedCareers: Career[];
   confidence: 'High' | 'Medium' | 'Low';
 }
 
@@ -53,7 +54,7 @@ export function calculateInterestScores(answers: QuizAnswers): Record<Pathway, n
   };
 }
 
-// Apply job market trends (20% weight)
+// Apply job market trends (30% weight) — now balanced equally
 export function calculateMarketScores(): Record<Pathway, number> {
   const baseScore = 100;
   return {
@@ -118,8 +119,8 @@ export function predictPathwayFromQuizOnly(
   // Get recommended subjects
   const recommendedSubjects = subjects.filter(s => s.pathway === recommendedPathway);
 
-  // Get recommended careers
-  const recommendedCareers = careers.filter(c => c.pathway === recommendedPathway);
+  // Get randomized career recommendations (different each session)
+  const recommendedCareers = getRandomCareers(recommendedPathway, 6);
 
   return {
     pathways,
