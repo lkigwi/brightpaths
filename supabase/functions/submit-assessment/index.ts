@@ -43,10 +43,18 @@ Deno.serve(async (req) => {
       );
     }
 
+    // Derive user_id from JWT if present (don't trust request body)
+    let verifiedUserId: string | null = null;
+    const authHeader = req.headers.get("authorization");
+    if (authHeader?.startsWith("Bearer ")) {
+      const { data: { user: authUser } } = await supabaseAdmin.auth.getUser(authHeader.slice(7));
+      verifiedUserId = authUser?.id ?? null;
+    }
+
     const body = await req.json();
 
     // Validate required fields server-side
-    const { student_name, top_pathway, top_pathway_percentage, stem_percentage, social_sciences_percentage, arts_sports_percentage, confidence, recommended_subjects, recommended_careers, user_id } = body;
+    const { student_name, top_pathway, top_pathway_percentage, stem_percentage, social_sciences_percentage, arts_sports_percentage, confidence, recommended_subjects, recommended_careers } = body;
 
     if (!student_name || typeof student_name !== "string" || student_name.length < 1 || student_name.length > 100) {
       return new Response(JSON.stringify({ error: "Invalid student name" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
@@ -85,7 +93,7 @@ Deno.serve(async (req) => {
     const { data, error } = await supabaseAdmin
       .from("assessment_results")
       .insert({
-        user_id: user_id || null,
+        user_id: verifiedUserId,
         student_name,
         top_pathway,
         top_pathway_percentage,
