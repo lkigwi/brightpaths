@@ -42,13 +42,16 @@ export function Feedback() {
     const sanitizedComment = sanitizeComment(comment);
 
     try {
-      const { error } = await supabase.from('feedback').insert({
-        assessment_id: assessmentId || null,
-        rating,
-        comment: sanitizedComment || null,
+      const { data, error } = await supabase.functions.invoke('submit-feedback', {
+        body: {
+          assessment_id: assessmentId || null,
+          rating,
+          comment: sanitizedComment || null,
+        },
       });
 
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
 
       setIsSubmitted(true);
       toast.success('Thank you for your feedback!');

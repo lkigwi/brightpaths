@@ -48,21 +48,23 @@ export function AssessmentProvider({ children }: { children: ReactNode }) {
         arts: fullResults.pathways.find(p => p.pathway === 'Arts & Sports')?.percentage || 0,
       };
 
-      const { data, error } = await supabase.from('assessment_results').insert([{
-        user_id: user?.id || null,
-        student_name: name || 'Anonymous',
-        top_pathway: fullResults.pathways[0].pathway,
-        top_pathway_percentage: fullResults.pathways[0].percentage,
-        stem_percentage: pathwayPercentages.stem,
-        social_sciences_percentage: pathwayPercentages.social,
-        arts_sports_percentage: pathwayPercentages.arts,
-        confidence: fullResults.confidence,
-        recommended_subjects: JSON.parse(JSON.stringify(fullResults.recommendedSubjects)),
-        recommended_careers: JSON.parse(JSON.stringify(fullResults.recommendedCareers)),
-      }]).select('id').single();
+      const { data: fnData, error } = await supabase.functions.invoke('submit-assessment', {
+        body: {
+          user_id: user?.id || null,
+          student_name: name || 'Anonymous',
+          top_pathway: fullResults.pathways[0].pathway,
+          top_pathway_percentage: fullResults.pathways[0].percentage,
+          stem_percentage: pathwayPercentages.stem,
+          social_sciences_percentage: pathwayPercentages.social,
+          arts_sports_percentage: pathwayPercentages.arts,
+          confidence: fullResults.confidence,
+          recommended_subjects: fullResults.recommendedSubjects,
+          recommended_careers: fullResults.recommendedCareers,
+        },
+      });
       
-      if (!error && data) {
-        setAssessmentId(data.id);
+      if (!error && fnData?.id) {
+        setAssessmentId(fnData.id);
       }
     } catch {
       // Error handled silently - user sees toast if needed

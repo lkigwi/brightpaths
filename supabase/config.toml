@@ -1,1 +1,7 @@
 project_id = "qtenethylzccmxdyhcbv"
+
+[functions.submit-assessment]
+verify_jwt = false
+
+[functions.submit-feedback]
+verify_jwt = false
