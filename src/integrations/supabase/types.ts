@@ -197,6 +197,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_current_user_admin: { Args: never; Returns: boolean }
       use_invite_code: {
         Args: { invite_code: string }
         Returns: Database["public"]["Enums"]["app_role"]

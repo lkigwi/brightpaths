@@ -89,13 +89,8 @@ export default function Results() {
     }
   }, [authLoading, user, navigate]);
 
-  const checkAdminAccess = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', userId)
-      .eq('role', 'admin')
-      .maybeSingle();
+  const checkAdminAccess = async (_userId: string) => {
+    const { data, error } = await supabase.rpc('is_current_user_admin');
 
     if (error || !data) {
       setAccessDenied(true);
