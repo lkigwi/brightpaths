@@ -145,6 +145,27 @@ export type Database = {
         }
         Relationships: []
       }
+      submission_rate_limits: {
+        Row: {
+          client_ip: string
+          created_at: string
+          id: string
+          table_name: string
+        }
+        Insert: {
+          client_ip: string
+          created_at?: string
+          id?: string
+          table_name: string
+        }
+        Update: {
+          client_ip?: string
+          created_at?: string
+          id?: string
+          table_name?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -168,6 +189,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cleanup_old_rate_limits: { Args: never; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
